@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import axios from "axios";
 import { useSearchParams, useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
 import Loading from "@/components/Loading";
 
-const EditUserForm = () => {
+const EditUserFormContent = () => {
   const baseUrl = "https://nodeproject-production-dc03.up.railway.app";
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -114,6 +114,14 @@ const EditUserForm = () => {
         </button>
       </form>
     </div>
+  );
+};
+
+const EditUserForm = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <EditUserFormContent />
+    </Suspense>
   );
 };
 

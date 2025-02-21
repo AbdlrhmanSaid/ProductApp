@@ -14,6 +14,7 @@ export default function EditProduct() {
     price: "",
     category: "",
     image: "",
+    quantity: 1,
   });
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +24,7 @@ export default function EditProduct() {
         setLoading(true);
         if (id) {
           const res = await axios.get(
-            `https:nodeproject-production-dc03.up.railway.app/getProducts/${id}`
+            `https://nodeproject-production-dc03.up.railway.app/getProducts/${id}`
           );
           setProduct({
             ...res.data,
@@ -33,6 +34,7 @@ export default function EditProduct() {
         }
       } catch (error) {
         console.error("❌ خطأ في جلب المنتج:", error);
+        setLoading(false);
       }
     };
     fetchProduct();
@@ -49,6 +51,13 @@ export default function EditProduct() {
     }
   };
 
+  const handleQuantityChange = (e) => {
+    const value = e.target.value;
+    if (!isNaN(value) && Number(value) >= 0) {
+      setProduct({ ...product, quantity: parseInt(value) });
+    }
+  };
+
   const handleBlur = () => {
     if (product.price === "" || isNaN(product.price)) {
       setProduct({ ...product, price: "0" });
@@ -61,9 +70,8 @@ export default function EditProduct() {
 
     try {
       setLoading(true);
-
       await axios.patch(
-        `https:nodeproject-production-dc03.up.railway.app/updateProduct/${id}`,
+        `https://nodeproject-production-dc03.up.railway.app/updateProduct/${id}`,
         { ...product, price: parseFloat(product.price) },
         {
           headers: {
@@ -72,15 +80,17 @@ export default function EditProduct() {
         }
       );
       setLoading(false);
-
       router.push("/");
     } catch (error) {
       console.error(
         "❌ خطأ في التحديث:",
         error.response?.data || error.message
       );
+      setLoading(false);
     }
   };
+
+  if (loading) return <Loading />;
 
   return (
     <div className="max-w-lg mx-auto bg-white p-5 rounded shadow">
@@ -90,52 +100,56 @@ export default function EditProduct() {
         </span>
         <span>تعديل المنتج</span>
       </h1>
-      {!product ? (
-        <Loading />
-      ) : (
-        <form onSubmit={updateProduct} className="space-y-3">
-          <input
-            type="text"
-            name="title"
-            value={product.title}
-            onChange={handleChange}
-            placeholder="اسم المنتج"
-            className="border p-2 w-full"
-          />
-          <input
-            type="number"
-            name="price"
-            value={product.price}
-            onChange={handlePriceChange}
-            onBlur={handleBlur}
-            placeholder="السعر"
-            className="border p-2 w-full"
-            min="0"
-          />
-          <input
-            type="text"
-            name="category"
-            value={product.category}
-            onChange={handleChange}
-            placeholder="التصنيف"
-            className="border p-2 w-full"
-          />
-          <input
-            type="text"
-            name="image"
-            value={product.image}
-            onChange={handleChange}
-            placeholder="رابط الصورة"
-            className="border p-2 w-full"
-          />
-          <button
-            type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded"
-          >
-            <FaCheckCircle />
-          </button>
-        </form>
-      )}
+      <form onSubmit={updateProduct} className="space-y-3">
+        <input
+          type="text"
+          name="title"
+          value={product.title}
+          onChange={handleChange}
+          placeholder="اسم المنتج"
+          className="border p-2 w-full"
+        />
+        <input
+          type="number"
+          name="price"
+          value={product.price}
+          onChange={handlePriceChange}
+          onBlur={handleBlur}
+          placeholder="السعر"
+          className="border p-2 w-full"
+          min="0"
+        />
+        <input
+          type="text"
+          name="category"
+          value={product.category}
+          onChange={handleChange}
+          placeholder="التصنيف"
+          className="border p-2 w-full"
+        />
+        <input
+          type="text"
+          name="image"
+          value={product.image}
+          onChange={handleChange}
+          placeholder="رابط الصورة"
+          className="border p-2 w-full"
+        />
+        <input
+          type="number"
+          name="quantity"
+          value={product.quantity}
+          onChange={handleQuantityChange}
+          placeholder="الكمية"
+          className="border p-2 w-full"
+        />
+        <button
+          type="submit"
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          <FaCheckCircle />
+        </button>
+      </form>
     </div>
   );
 }
