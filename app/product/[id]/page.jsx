@@ -2,47 +2,53 @@
 import { use, useEffect, useRef } from "react";
 import useProduct from "@/api/useProduct";
 import Loading from "@/components/Loading";
-import { QRCodeCanvas } from "qrcode.react";
+import JsBarcode from "jsbarcode";
 
 const Page = ({ params }) => {
   const safeParams = use(params) || {};
   const { id } = safeParams;
   const { product, loading, getProduct } = useProduct();
-  const qrRef = useRef(null);
+  const barcodeRef = useRef(null);
 
   useEffect(() => {
     if (id) getProduct(id);
   }, [id]);
 
+  useEffect(() => {
+    if (product && barcodeRef.current) {
+      JsBarcode(barcodeRef.current, `${product.title}-${product.price}`, {
+        format: "CODE128",
+        lineColor: "#000",
+        width: 2,
+        height: 100,
+        displayValue: true,
+      });
+    }
+  }, [product]);
+
   if (loading) return <Loading />;
   if (!product)
     return <p className="text-center mt-10 text-red-500">Product not found</p>;
 
-  const qrValue = JSON.stringify({
-    title: product.title,
-    price: product.price,
-  });
-
-  // دالة لطباعة QR Code من الـ canvas
+  // دالة لطباعة الباركود
   const handlePrint = () => {
-    const canvas = qrRef.current.querySelector("canvas");
-    if (!canvas) {
-      alert("QR Code not generated yet.");
+    const svg = barcodeRef.current;
+    if (!svg) {
+      alert("Barcode not generated yet.");
       return;
     }
 
-    // تحويل الـ canvas إلى صورة
-    const imgData = canvas.toDataURL("image/png");
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const imgData = `data:image/svg+xml;base64,${btoa(svgData)}`;
 
-    // فتح نافذة جديدة للطباعة
     const printWindow = window.open("", "_blank");
     printWindow.document.write(`
       <html>
         <head>
-          <title>Print QR Code</title>
+          <title>Print Barcode</title>
         </head>
         <body style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-          <img src="${imgData}" alt="QR Code" />
+          <img src="${imgData}" alt="Barcode" />
         </body>
       </html>
     `);
@@ -77,18 +83,11 @@ const Page = ({ params }) => {
             ${product.price || "N/A"}
           </p>
 
-          {/* QR Code */}
-          <div className="mt-6" ref={qrRef}>
-            <h2 className="text-xl font-semibold mb-2">Product QR Code:</h2>
+          {/* Barcode */}
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold mb-2">Product Barcode:</h2>
             <div className="bg-gray-100 p-4 rounded-lg flex justify-center">
-              <QRCodeCanvas
-                value={qrValue}
-                size={200}
-                bgColor={"#ffffff"}
-                fgColor={"#000000"}
-                level={"H"}
-                includeMargin={true}
-              />
+              <svg ref={barcodeRef}></svg>
             </div>
           </div>
 
@@ -96,7 +95,7 @@ const Page = ({ params }) => {
             onClick={handlePrint}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
-            Print QR Code
+            Print Barcode
           </button>
         </div>
       </div>
