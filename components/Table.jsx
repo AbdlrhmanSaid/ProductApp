@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
+import Loading from "./Loading";
 
 const Table = ({ users, confirmDelete }) => {
   const router = useRouter();
@@ -41,7 +42,7 @@ const Table = ({ users, confirmDelete }) => {
           </tbody>
         </table>
       ) : (
-        ""
+        <Loading />
       )}
     </>
   );

@@ -1,60 +1,20 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+
 import DialogWindow from "./Dialog";
 import Table from "./Table";
+import useUsers from "@/api/useUsers";
+import AlertMsg from "./AlertMsg";
 
 const UsersTable = () => {
-  const [users, setUsers] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
-  const [search, setSearch] = useState("");
-
-  const baseUrl = "https://nodeproject-production-dc03.up.railway.app";
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get(`${baseUrl}/getUsers`);
-      setUsers(response.data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
-  const confirmDelete = (id) => {
-    setUserToDelete(id);
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setUserToDelete(null);
-  };
-
-  const deleteUser = async () => {
-    if (!userToDelete) return;
-    try {
-      await axios.delete(`${baseUrl}/deleteUser/${userToDelete}`);
-      setUsers(users.filter((user) => user._id !== userToDelete));
-      handleClose();
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
-
-  const filteredUsers =
-    search !== ""
-      ? users.filter(
-          (user) =>
-            user.username.toLowerCase().includes(search.toLowerCase()) ||
-            user.email.toLowerCase().includes(search.toLowerCase()) ||
-            user.position.toLowerCase().includes(search.toLowerCase())
-        )
-      : users;
-
+  const {
+    search,
+    filteredUsers,
+    confirmDelete,
+    deleteUser,
+    open,
+    handleClose,
+    setSearch,
+  } = useUsers();
   return (
     <div className="container mx-auto mt-5 bg-white p-3 rounded shadow">
       <h1 className="text-3xl font-bold mb-4">قائمة المستخدمين</h1>
@@ -69,7 +29,7 @@ const UsersTable = () => {
         {filteredUsers.length > 0 ? (
           <Table users={filteredUsers} confirmDelete={confirmDelete} />
         ) : (
-          ""
+          <AlertMsg msg={"لا يوجد مستخدمين"} />
         )}
       </div>
       <DialogWindow
