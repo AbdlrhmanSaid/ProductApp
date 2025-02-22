@@ -8,7 +8,7 @@ const Page = ({ params }) => {
   const safeParams = use(params) || {};
   const { id } = safeParams;
   const { product, loading, getProduct } = useProduct();
-  const qrRef = useRef(null); // مرجع للـ QR Code Canvas
+  const qrRef = useRef(null);
 
   useEffect(() => {
     if (id) getProduct(id);
@@ -92,7 +92,6 @@ const Page = ({ params }) => {
             </div>
           </div>
 
-          {/* زر الطباعة */}
           <button
             onClick={handlePrint}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
