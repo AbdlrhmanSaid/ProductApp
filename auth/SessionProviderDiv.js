@@ -2,6 +2,7 @@
 
 import { SessionProvider } from "next-auth/react";
 import { useEffect, useState } from "react";
+import Loading from "@/components/Loading";
 
 const SessionProviderDiv = ({ children, session }) => {
   const [mounted, setMounted] = useState(false);
@@ -10,7 +11,7 @@ const SessionProviderDiv = ({ children, session }) => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return <p>جارٍ تحميل البيانات...</p>;
+  if (!mounted) return <Loading />;
 
   return <SessionProvider session={session}>{children}</SessionProvider>;
 };

@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Loading from "@/components/Loading";
 
 export default function AuthGuard({ children }) {
   const { data: session, status } = useSession();
@@ -21,7 +22,7 @@ export default function AuthGuard({ children }) {
   }, [status, router, isMounted, pathname]);
 
   if (!isMounted || status === "loading") {
-    return <p>جاري تحميل الصفحة...</p>;
+    return <Loading />;
   }
 
   return children;
