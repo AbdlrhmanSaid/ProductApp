@@ -16,6 +16,7 @@ export const authOptions = {
       },
       async authorize(credentials) {
         try {
+          // استدعاء Endpoint لاسترجاع بيانات المستخدم من السيرفر الخارجي
           const res = await fetch(
             "https://nodeproject-production-dc03.up.railway.app/getUserByEmail",
             {
@@ -32,7 +33,6 @@ export const authOptions = {
           }
 
           const user = await res.json();
-
           console.log("User record from /getUserByEmail:", user);
 
           if (!user) {
@@ -86,7 +86,7 @@ export const authOptions = {
     },
   },
   pages: {
-    signIn: "/login",
+    signIn: "/login", // إعادة التوجيه لصفحة تسجيل الدخول عند الحاجة
   },
   secret: process.env.NEXTAUTH_SECRET,
   session: {
