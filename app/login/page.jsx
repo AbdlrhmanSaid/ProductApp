@@ -30,10 +30,8 @@ export default function LoginPage() {
     });
 
     if (result?.ok) {
-      // نجاح تسجيل الدخول
       router.push("/");
     } else {
-      // فشل تسجيل الدخول
       setError("فشل تسجيل الدخول! تأكد من صحة البيانات.");
     }
   };

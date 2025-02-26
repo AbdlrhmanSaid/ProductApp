@@ -16,7 +16,6 @@ export const authOptions = {
       },
       async authorize(credentials) {
         try {
-          // استدعاء Endpoint خاص بالمصادقة لإرجاع بيانات المستخدم مع كلمة المرور
           const res = await fetch(
             "https://nodeproject-production-dc03.up.railway.app/getUserByEmail",
             {
@@ -42,12 +41,10 @@ export const authOptions = {
             );
           }
 
-          // التأكد من وجود حقل كلمة المرور للمستخدم
           if (!user.password) {
             throw new Error("كلمة المرور غير موجودة لهذا المستخدم.");
           }
 
-          // التحقق من صحة كلمة المرور باستخدام bcrypt
           const isPasswordValid = await bcrypt.compare(
             credentials.password,
             user.password
@@ -57,7 +54,6 @@ export const authOptions = {
             throw new Error("كلمة المرور غير صحيحة.");
           }
 
-          // إعادة البيانات الضرورية للمستخدم في حال نجاح المصادقة
           return {
             id: user._id,
             name: user.username,
@@ -90,9 +86,9 @@ export const authOptions = {
     },
   },
   pages: {
-    signIn: "/login", // مسار صفحة تسجيل الدخول
+    signIn: "/login",
   },
-  secret: process.env.NEXTAUTH_SECRET, // تأكد من ضبط NEXTAUTH_SECRET في .env.local
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },
