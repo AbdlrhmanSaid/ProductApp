@@ -14,8 +14,10 @@
     "@mui/icons-material": "^6.4.5",
     "@mui/material": "^6.4.5",
     "axios": "^1.7.9",
+    "bcryptjs": "^3.0.2",
     "jsbarcode": "^3.11.6",
     "next": "15.1.7",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0"

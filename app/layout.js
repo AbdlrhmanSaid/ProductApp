@@ -1,17 +1,8 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import SessionProviderDiv from "@/auth/SessionProviderDiv";
+import AuthGuard from "@/auth/AuthGuard";
 
 export const metadata = {
   title: "Warehouse management",
@@ -20,11 +11,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="ar" suppressHydrationWarning>
       <body className="bg-gray-100 text-gray-900">
-        <Navbar />
-        <main className="container mx-auto p-5">{children}</main>
-        <Footer />
+        <SessionProviderDiv>
+          <AuthGuard>
+            <Navbar />
+            <main className="container mx-auto p-5">{children}</main>
+            <Footer />
+          </AuthGuard>
+        </SessionProviderDiv>
       </body>
     </html>
   );

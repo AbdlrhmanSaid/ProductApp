@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import bcrypt from "bcryptjs";
 
 const useAddUser = () => {
   const baseUrl = "https://nodeproject-production-dc03.up.railway.app";
@@ -18,13 +19,11 @@ const useAddUser = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // دالة لتحديث الحقول
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // التحقق من صحة كلمة المرور وإرسال البيانات
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,16 +36,19 @@ const useAddUser = () => {
       setLoading(true);
       setError("");
 
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(formData.password, saltRounds);
+
       const newUser = {
         username: formData.username,
         email: formData.email,
-        password: formData.password,
+        password: hashedPassword,
         position: formData.position,
       };
 
       await axios.post(`${baseUrl}/postUser`, newUser);
 
-      router.push("/"); // إعادة التوجيه بعد النجاح
+      router.push("/");
     } catch (err) {
       setError(err.response?.data?.message || "حدث خطأ أثناء إنشاء المستخدم.");
     } finally {

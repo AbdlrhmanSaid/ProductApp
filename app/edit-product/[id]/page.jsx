@@ -4,6 +4,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import Loading from "@/components/Loading";
 import useEditProduct from "@/api/useEditProduct";
+import CheckAuth from "@/auth/CheckAuth";
 
 export default function EditProduct() {
   const {
@@ -25,7 +26,7 @@ export default function EditProduct() {
   if (loading) return <Loading />;
 
   return (
-    <>
+    <CheckAuth>
       <div className="h-screen flex justify-between items-center">
         <div className="max-w-lg mx-auto bg-white p-5 rounded shadow">
           <h1 className="text-2xl font-bold mb-5 flex items-center gap-1 justify-center">
@@ -86,6 +87,6 @@ export default function EditProduct() {
           </form>
         </div>
       </div>
-    </>
+    </CheckAuth>
   );
 }
