@@ -27,11 +27,10 @@ export default function LoginPage() {
     const result = await signIn("credentials", {
       email,
       password,
-      redirect: false, // نستخدم redirect: false لنتحكم بالإعادة بأنفسنا
+      redirect: false,
     });
 
     if (result?.ok) {
-      // نجاح: نوجه المستخدم للصفحة الرئيسية أو أي صفحة تريدها
       router.push("/");
     } else {
       // فشل: نظهر رسالة الخطأ
