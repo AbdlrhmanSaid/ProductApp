@@ -1,13 +1,12 @@
 "use client";
-import { use, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import useProduct from "@/api/useProduct";
 import Loading from "@/components/Loading";
 import JsBarcode from "jsbarcode";
 import CheckAuth from "@/auth/CheckAuth";
 
 const Page = ({ params }) => {
-  const safeParams = use(params) || {};
-  const { id } = safeParams;
+  const { id } = params || {};
   const { product, loading, getProduct } = useProduct();
   const barcodeRef = useRef(null);
 

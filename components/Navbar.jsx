@@ -62,7 +62,12 @@ function ResponsiveAppBar() {
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
-                <MenuItem onClick={() => signOut()}>
+
+                <MenuItem
+                  onClick={() => {
+                    signOut();
+                  }}
+                >
                   <Typography textAlign="center" color="error">
                     تسجيل الخروج
                   </Typography>
