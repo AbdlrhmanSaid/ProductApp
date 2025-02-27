@@ -12,11 +12,13 @@ export const authOptions = {
           type: "email",
           placeholder: "email@example.com",
         },
-        password: { label: "Password", type: "password" },
+        password: {
+          label: "Password",
+          type: "password",
+        },
       },
       async authorize(credentials) {
         try {
-          // استدعاء Endpoint لاسترجاع بيانات المستخدم من السيرفر الخارجي
           const res = await fetch(
             "https://nodeproject-production-dc03.up.railway.app/getUserByEmail",
             {
@@ -33,16 +35,9 @@ export const authOptions = {
           }
 
           const user = await res.json();
-          console.log("User record from /getUserByEmail:", user);
 
-          if (!user) {
-            throw new Error(
-              "المستخدم غير موجود أو البريد الإلكتروني غير صحيح."
-            );
-          }
-
-          if (!user.password) {
-            throw new Error("كلمة المرور غير موجودة لهذا المستخدم.");
+          if (!user || !user.password) {
+            throw new Error("المستخدم غير موجود أو كلمة المرور غير صحيحة.");
           }
 
           const isPasswordValid = await bcrypt.compare(
@@ -86,7 +81,7 @@ export const authOptions = {
     },
   },
   pages: {
-    signIn: "/login", // إعادة التوجيه لصفحة تسجيل الدخول عند الحاجة
+    signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
   session: {
