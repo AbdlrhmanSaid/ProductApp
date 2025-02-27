@@ -1,8 +1,6 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import SessionProviderDiv from "@/auth/SessionProviderDiv";
-import AuthGuard from "@/auth/AuthGuard";
 
 export const metadata = {
   title: "Warehouse management",
@@ -13,13 +11,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" suppressHydrationWarning>
       <body className="bg-100-700 text-gray-900">
-        <SessionProviderDiv>
-          <AuthGuard>
+        <>
+          <>
             <Navbar />
             <main className="container mx-auto p-5">{children}</main>
             <Footer />
-          </AuthGuard>
-        </SessionProviderDiv>
+          </>
+        </>
       </body>
     </html>
   );

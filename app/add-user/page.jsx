@@ -2,13 +2,12 @@
 import React from "react";
 import useAddUser from "@/api/useAddUser";
 import Spinner from "@/components/Spinner";
-import CheckAuth from "@/auth/CheckAuth";
 
 const AddUserForm = () => {
   const { formData, loading, error, handleChange, handleSubmit } = useAddUser();
 
   return (
-    <CheckAuth>
+    <>
       <div className="h-screen flex justify-center items-center">
         <div className="container mt-5 bg-white p-5 rounded shadow-lg w-96">
           <h1 className="text-2xl font-bold mb-4 text-center">
@@ -88,7 +87,7 @@ const AddUserForm = () => {
           </form>
         </div>
       </div>
-    </CheckAuth>
+    </>
   );
 };
 
