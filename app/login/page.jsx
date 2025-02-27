@@ -14,10 +14,11 @@ import {
 } from "@mui/material";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,12 +27,14 @@ export default function LoginPage() {
     const result = await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      redirect: false, // نستخدم redirect: false لنتحكم بالإعادة بأنفسنا
     });
 
     if (result?.ok) {
+      // نجاح: نوجه المستخدم للصفحة الرئيسية أو أي صفحة تريدها
       router.push("/");
     } else {
+      // فشل: نظهر رسالة الخطأ
       setError("فشل تسجيل الدخول! تأكد من صحة البيانات.");
     }
   };
