@@ -3,6 +3,7 @@ import React, { Suspense } from "react";
 import useEditUser from "@/api/useEditUser";
 import Spinner from "@/components/Spinner";
 import Loading from "@/components/Loading";
+import CheckAuth from "@/auth/checkAuth";
 
 const EditUserFormContent = () => {
   const { formData, loading, error, handleChange, handleSubmit } =
@@ -11,7 +12,7 @@ const EditUserFormContent = () => {
   if (loading) return <Loading />;
 
   return (
-    <>
+    <CheckAuth>
       <div className="h-screen flex justify-between items-center">
         <div className="container mx-auto mt-5 bg-white p-5 rounded shadow">
           <h1 className="text-3xl font-bold mb-4">تعديل بيانات المستخدم</h1>
@@ -64,7 +65,7 @@ const EditUserFormContent = () => {
           </form>
         </div>
       </div>
-    </>
+    </CheckAuth>
   );
 };
 

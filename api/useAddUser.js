@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import bcrypt from "bcryptjs";
 
 const useAddUser = () => {
   const baseUrl = "https://nodeproject-production-dc03.up.railway.app";
@@ -36,13 +35,10 @@ const useAddUser = () => {
       setLoading(true);
       setError("");
 
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(formData.password, saltRounds);
-
       const newUser = {
         username: formData.username,
         email: formData.email,
-        password: hashedPassword,
+        password: formData.password,
         position: formData.position,
       };
 
