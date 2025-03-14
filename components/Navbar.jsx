@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser, setUser } from "@/store/slices/userSlice";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,21 +14,24 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
 import Image from "next/image";
 import Link from "next/link";
 
 const settings = ["Profile", "Account"];
 
 function ResponsiveAppBar() {
-  const [anchorElUser, setAnchorElUser] = useState(null);
-  const [userId, setUserId] = useState(null);
+  const dispatch = useDispatch();
   const router = useRouter();
+  const user = useSelector((state) => state.user.userData);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   useEffect(() => {
-    // جلب user_id عند تحميل الصفحة
-    const storedUserId = sessionStorage.getItem("user_id");
-    setUserId(storedUserId);
-  }, []);
+    const storedUser = sessionStorage.getItem("user_data");
+    if (storedUser) {
+      dispatch(setUser(JSON.parse(storedUser)));
+    }
+  }, [dispatch]);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -37,8 +42,8 @@ function ResponsiveAppBar() {
   };
 
   const signOut = () => {
-    sessionStorage.removeItem("user_id");
-    setUserId(null);
+    sessionStorage.removeItem("user_data");
+    dispatch(logoutUser());
     router.push("/login");
   };
 
@@ -47,23 +52,23 @@ function ResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
-            <Link href={"/"}>
+            <Link href="/">
               <Image src="/favicon.png" width={100} height={50} alt="Logo" />
             </Link>
           </Box>
 
-          {!userId ? (
-            <Link
-              href={"/login"}
-              style={{ color: "white", textDecoration: "none" }}
-            >
-              سجل الدخول
-            </Link>
+          {!user || !user.email ? (
+            <Button className="bg-white" component={Link} href="/login">
+              تسجيل الدخول
+            </Button>
           ) : (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar />
+                  <Avatar
+                    alt={user.username || "User"}
+                    src={user.avatar || ""}
+                  />
                 </IconButton>
               </Tooltip>
               <Menu

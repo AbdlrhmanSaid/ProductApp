@@ -13,14 +13,16 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.5",
     "@mui/material": "^6.4.5",
+    "@reduxjs/toolkit": "^2.6.1",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "jsbarcode": "^3.11.6",
-    "next": "^13.5.8",
+    "next": "^15.2.2",
     "next-auth": "^4.24.11",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

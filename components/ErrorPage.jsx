@@ -1,14 +1,8 @@
 "use client";
-
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function ErrorPage({ error, reset }) {
   const router = useRouter();
-
-  useEffect(() => {
-    console.error("🚨 خطأ:", error);
-  }, [error]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 text-center">

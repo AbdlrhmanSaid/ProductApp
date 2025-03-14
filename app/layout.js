@@ -1,6 +1,7 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ProviderStore from "@/store/ProviderStore";
 
 export const metadata = {
   title: "Warehouse management",
@@ -9,16 +10,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ar" suppressHydrationWarning>
-      <body className="bg-100-700 text-gray-900">
-        <>
-          <>
-            <Navbar />
-            <main className="container mx-auto p-5">{children}</main>
-            <Footer />
-          </>
-        </>
-      </body>
-    </html>
+    <ProviderStore>
+      <html lang="ar" suppressHydrationWarning>
+        <body className="bg-100-700 text-gray-900">
+          <Navbar />
+          <main className="container mx-auto p-5">{children}</main>
+          <Footer />
+        </body>
+      </html>
+    </ProviderStore>
   );
 }

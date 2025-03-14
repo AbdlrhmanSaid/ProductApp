@@ -1,19 +1,29 @@
 "use client";
-import { useState, useEffect } from "react";
+
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import ErrorLogin from "@/components/ErrorLogin";
 
 const CheckAuth = ({ children }) => {
-  const [userId, setUserId] = useState(null);
+  const user = useSelector((state) => state.user.userData);
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    setUserId(sessionStorage.getItem("user_id"));
-  }, []);
+    const storedUser = sessionStorage.getItem("user_data");
+    if (storedUser) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, [user]);
 
-  if (userId === null) {
+  if (!isAuthenticated) {
     return <ErrorLogin />;
   }
 
-  return <>{userId ? children : <ErrorLogin />}</>;
+  return children;
 };
 
 export default CheckAuth;
