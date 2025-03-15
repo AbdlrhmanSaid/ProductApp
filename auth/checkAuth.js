@@ -8,22 +8,20 @@ import ErrorLogin from "@/components/ErrorLogin";
 const CheckAuth = ({ children }) => {
   const user = useSelector((state) => state.user.userData);
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
-    const storedUser = sessionStorage.getItem("user_data");
-    if (storedUser) {
-      setIsAuthenticated(true);
+    if (!user) {
+      setIsChecking(true);
+      router.replace("/login");
     } else {
-      setIsAuthenticated(false);
+      setIsChecking(false);
     }
-  }, [user]);
+  }, [user, router]);
 
-  if (!isAuthenticated) {
-    return <ErrorLogin />;
-  }
+  if (isChecking) return <ErrorLogin />;
 
-  return children;
+  return user ? children : <ErrorLogin />;
 };
 
 export default CheckAuth;

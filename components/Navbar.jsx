@@ -18,7 +18,12 @@ import Button from "@mui/material/Button";
 import Image from "next/image";
 import Link from "next/link";
 
-const settings = ["Profile", "Account"];
+const settings = [
+  {
+    label: "Profile",
+    link: "/profile",
+  },
+];
 
 function ResponsiveAppBar() {
   const dispatch = useDispatch();
@@ -81,10 +86,14 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
+                {settings.map((setting, index) => (
+                  <Link key={index} href={`${setting.link}/${user._id}`}>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center">
+                        {setting.label}
+                      </Typography>
+                    </MenuItem>
+                  </Link>
                 ))}
                 <MenuItem onClick={signOut}>
                   <Typography textAlign="center" color="error">

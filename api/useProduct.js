@@ -7,7 +7,6 @@ const useProduct = () => {
 
   const getProduct = async (id) => {
     if (!id) return;
-
     try {
       const res = await fetch(
         `https://nodeproject-production-dc03.up.railway.app/getProducts/${id}`

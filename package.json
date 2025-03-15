@@ -19,6 +19,7 @@
     "jsbarcode": "^3.11.6",
     "next": "^15.2.2",
     "next-auth": "^4.24.11",
+    "qrcode.react": "^4.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^5.5.0",
