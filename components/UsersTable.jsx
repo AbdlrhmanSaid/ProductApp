@@ -2,7 +2,7 @@
 
 import DialogWindow from "./Dialog";
 import Table from "./Table";
-import useUsers from "@/api/useUsers";
+import useUsers from "@/hooks/useUsers";
 import AlertMsg from "./AlertMsg";
 import { useSelector } from "react-redux";
 
@@ -35,7 +35,11 @@ const UsersTable = () => {
       />
       <div className="overflow-x-auto">
         {filteredUsers.length > 0 ? (
-          <Table users={filteredUsers} confirmDelete={confirmDelete} />
+          <Table
+            position={position}
+            users={filteredUsers}
+            confirmDelete={confirmDelete}
+          />
         ) : (
           <AlertMsg msg={"لا يوجد مستخدمين"} />
         )}

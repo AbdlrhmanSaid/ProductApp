@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import Loading from "@/components/Loading";
-import useEditProduct from "@/api/useEditProduct";
+import useEditProduct from "@/hooks/useEditProduct";
 import CheckAuth from "@/auth/checkAuth";
 
 export default function EditProduct() {

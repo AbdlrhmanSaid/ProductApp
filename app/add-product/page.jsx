@@ -1,5 +1,5 @@
 "use client";
-import useAddProduct from "@/api/useAddProduct";
+import useAddProduct from "@/hooks/useAddProduct";
 import Loading from "@/components/Loading";
 import CheckAuth from "@/auth/checkAuth";
 

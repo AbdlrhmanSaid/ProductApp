@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import useAddUser from "@/api/useAddUser";
+import useAddUser from "@/hooks/useAddUser";
 import Spinner from "@/components/Spinner";
 import CheckAuth from "@/auth/checkAuth";
 

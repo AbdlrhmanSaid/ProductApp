@@ -1,78 +1,27 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import bcrypt from "bcryptjs";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "@/store/slices/userSlice";
-import { useRouter } from "next/navigation";
+import React from "react";
+import useLogin from "@/hooks/useLogin";
 
 const LoginPage = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const user = useSelector((state) => state.user.userData);
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage("");
-    setIsLoading(true);
-
-    try {
-      const response = await axios.post(
-        "https://nodeproject-production-dc03.up.railway.app/getUserByEmail",
-        { email: formData.email }
-      );
-      const userData = response.data;
-
-      if (!userData.password) {
-        setErrorMessage("User not found");
-        setIsLoading(false);
-        return;
-      }
-
-      const match = await bcrypt.compare(formData.password, userData.password);
-
-      if (!match) {
-        setErrorMessage("Incorrect password");
-        setIsLoading(false);
-        return;
-      }
-
-      dispatch(setUser(userData));
-      sessionStorage.setItem("user_data", JSON.stringify(userData));
-      router.push("/");
-    } catch (error) {
-      setErrorMessage("An error occurred. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      router.push("/");
-    }
-  });
+  const {
+    user,
+    formData,
+    errorMessage,
+    isLoading,
+    isBlocked,
+    handleChange,
+    handleSubmit,
+  } = useLogin();
 
   return (
     <div className="flex items-center justify-center h-screen">
       {user ? (
-        <p>You are already logged in</p>
+        <p>تم تسجيل الدخول بنجاح</p>
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 p-6 border rounded-lg shadow-lg"
+          className="flex flex-col gap-4 p-6 border rounded-lg shadow-lg w-96"
         >
           {errorMessage && (
             <p className="bg-red-800 text-white text-center p-2 rounded-md">
@@ -85,9 +34,9 @@ const LoginPage = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            placeholder="Enter email"
+            placeholder="أدخل البريد الإلكتروني"
             className="p-2 border rounded-md"
-            disabled={isLoading || user}
+            disabled={isLoading || isBlocked}
           />
           <input
             type="password"
@@ -95,16 +44,22 @@ const LoginPage = () => {
             value={formData.password}
             onChange={handleChange}
             required
-            placeholder="Enter password"
+            placeholder="أدخل كلمة المرور"
             className="p-2 border rounded-md"
-            disabled={isLoading || user}
+            disabled={isLoading || isBlocked}
           />
           <button
             type="submit"
-            className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            disabled={isLoading}
+            className={`p-2 text-white rounded-md ${
+              isBlocked ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-600"
+            }`}
+            disabled={isLoading || isBlocked}
           >
-            {isLoading ? "Logging in..." : "Submit"}
+            {isBlocked
+              ? "محاولات محظورة"
+              : isLoading
+              ? "جاري تسجيل الدخول..."
+              : "تسجيل الدخول"}
           </button>
         </form>
       )}

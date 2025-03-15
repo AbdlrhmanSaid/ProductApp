@@ -5,7 +5,7 @@ import Card from "./Card";
 import Categories from "./Categories";
 import DialogWindow from "./Dialog";
 import Loading from "./Loading";
-import useProducts from "../api/useProducts";
+import useProducts from "../hooks/useProducts";
 import AlertMsg from "./AlertMsg";
 
 export default function Products() {

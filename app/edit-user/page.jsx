@@ -1,6 +1,6 @@
 "use client";
 import React, { Suspense } from "react";
-import useEditUser from "@/api/useEditUser";
+import useEditUser from "@/hooks/useEditUser";
 import Spinner from "@/components/Spinner";
 import Loading from "@/components/Loading";
 import CheckAuth from "@/auth/checkAuth";

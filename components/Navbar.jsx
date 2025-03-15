@@ -86,15 +86,21 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting, index) => (
-                  <Link key={index} href={`${setting.link}/${user._id}`}>
-                    <MenuItem onClick={handleCloseUserMenu}>
+                {user &&
+                  user._id &&
+                  settings.map((setting, index) => (
+                    <MenuItem
+                      key={index}
+                      onClick={handleCloseUserMenu}
+                      component="a"
+                      href={`${setting.link}/${user._id}`}
+                    >
                       <Typography textAlign="center">
                         {setting.label}
                       </Typography>
                     </MenuItem>
-                  </Link>
-                ))}
+                  ))}
+
                 <MenuItem onClick={signOut}>
                   <Typography textAlign="center" color="error">
                     تسجيل الخروج

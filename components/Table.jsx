@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
 
-const Table = ({ users, confirmDelete }) => {
+const Table = ({ users, confirmDelete, position }) => {
   const router = useRouter();
 
   return (
@@ -24,18 +24,24 @@ const Table = ({ users, confirmDelete }) => {
                 <td className="border p-2">{user.email}</td>
                 <td className="border p-2">{user.position || "N/A"}</td>
                 <td className="border p-2 flex items-center justify-center ">
-                  <button
-                    className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
-                    onClick={() => router.push(`/edit-user?userId=${user._id}`)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="bg-red-500 text-white px-3 py-1 rounded"
-                    onClick={() => confirmDelete(user._id)}
-                  >
-                    Delete
-                  </button>
+                  {position === "owner" && (
+                    <>
+                      <button
+                        className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
+                        onClick={() =>
+                          router.push(`/edit-user?userId=${user._id}`)
+                        }
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="bg-red-500 text-white px-3 py-1 rounded"
+                        onClick={() => confirmDelete(user._id)}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}

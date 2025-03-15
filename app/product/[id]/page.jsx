@@ -1,6 +1,6 @@
 "use client";
 import { use, useEffect, useRef } from "react";
-import useProduct from "@/api/useProduct";
+import useProduct from "@/hooks/useProduct";
 import Loading from "@/components/Loading";
 import { QRCodeCanvas } from "qrcode.react";
 import CheckAuth from "@/auth/checkAuth";
