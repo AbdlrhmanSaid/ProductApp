@@ -3,7 +3,7 @@ import { HiOutlineCurrencyDollar } from "react-icons/hi";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 
-export default function ProductCard({ product, handleOpen }) {
+export default function ProductCard({ product, handleOpen, position }) {
   return (
     <div className="border p-4 rounded shadow-md bg-white">
       <img
@@ -26,23 +26,29 @@ export default function ProductCard({ product, handleOpen }) {
       </h1>
 
       <div className="flex justify-between mt-3">
-        <button
-          onClick={() => handleOpen(product)}
-          className="bg-red-500 text-white px-4 py-2 rounded"
-        >
-          <MdDelete />
-        </button>
+        {position === "admin" ||
+          (position === "owner" && (
+            <button
+              onClick={() => handleOpen(product)}
+              className="bg-red-500 text-white px-4 py-2 rounded"
+            >
+              <MdDelete />
+            </button>
+          ))}
 
         <Link href={`product/${product._id}`}>
           <button className="bg-blue-500 text-white px-4 py-2 rounded">
             Visit
           </button>
         </Link>
-        <Link href={`/edit-product/${product._id}`}>
-          <button className="bg-green-500 text-white px-4 py-2 rounded">
-            <MdEdit />
-          </button>
-        </Link>
+        {position === "admin" ||
+          (position === "owner" && (
+            <Link href={`/edit-product/${product._id}`}>
+              <button className="bg-green-500 text-white px-4 py-2 rounded">
+                <MdEdit />
+              </button>
+            </Link>
+          ))}
       </div>
     </div>
   );

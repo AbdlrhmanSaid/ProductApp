@@ -1,12 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const useUsers = () => {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [search, setSearch] = useState("");
+  const user = useSelector((state) => state.user.userData);
+  const position = user?.position;
 
   const baseUrl = "https://nodeproject-production-dc03.up.railway.app";
   useEffect(() => {

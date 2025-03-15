@@ -35,6 +35,10 @@ const Page = () => {
                 <strong className="text-gray-900">البريد الإلكتروني: </strong>
                 {user?.email || "غير متوفر"}
               </p>
+              <p className="text-lg text-gray-700 mt-2">
+                <strong className="text-gray-900"> الصلاحيه: </strong>
+                {user?.position || "غير متوفر"}
+              </p>
             </div>
           </div>
         </div>

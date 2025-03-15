@@ -20,6 +20,7 @@ export default function Products() {
     deleteProduct,
     uniqueCategories,
     filteredProducts,
+    position,
   } = useProducts();
 
   useEffect(() => {
@@ -28,7 +29,8 @@ export default function Products() {
 
   return (
     <div>
-      <SpeedDial />
+      {position === "owner" && <SpeedDial />}
+
       <input
         type="search"
         placeholder="بحث"
@@ -54,6 +56,7 @@ export default function Products() {
                   product={product}
                   key={product._id}
                   handleOpen={handleOpen}
+                  position={position}
                 />
               ))
             ) : (

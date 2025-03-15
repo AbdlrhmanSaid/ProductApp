@@ -2,6 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import ErrorPage from "@/components/ErrorPage";
+import { useSelector } from "react-redux";
 
 const useProducts = () => {
   const [products, setProducts] = useState([]);
@@ -10,6 +11,9 @@ const useProducts = () => {
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [error, setError] = useState(null);
+
+  const user = useSelector((state) => state.user.userData);
+  const position = user?.position;
 
   const fetchProducts = async () => {
     try {
@@ -85,6 +89,7 @@ const useProducts = () => {
     categories,
     uniqueCategories,
     filteredProducts,
+    position,
   };
 };
 
