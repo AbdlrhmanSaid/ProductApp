@@ -1,29 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { logoutUser, setUser } from "@/store/slices/userSlice";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
+import { logoutUser } from "@/store/slices/userSlice";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Avatar,
+  Tooltip,
+  MenuItem,
+  Button,
+} from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 
-const settings = [
-  {
-    label: "Profile",
-    link: "/profile",
-  },
-];
+const settings = [{ label: "الملف الشخصي", link: "/profile" }];
 
 function ResponsiveAppBar() {
   const dispatch = useDispatch();
@@ -31,20 +28,8 @@ function ResponsiveAppBar() {
   const user = useSelector((state) => state.user.userData);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  useEffect(() => {
-    const storedUser = sessionStorage.getItem("user_data");
-    if (storedUser) {
-      dispatch(setUser(JSON.parse(storedUser)));
-    }
-  }, [dispatch]);
-
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
+  const handleCloseUserMenu = () => setAnchorElUser(null);
 
   const signOut = () => {
     sessionStorage.removeItem("user_data");
@@ -62,13 +47,13 @@ function ResponsiveAppBar() {
             </Link>
           </Box>
 
-          {!user || !user.email ? (
+          {!user ? (
             <Button className="bg-white" component={Link} href="/login">
               تسجيل الدخول
             </Button>
           ) : (
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
+              <Tooltip title="الإعدادات">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt={user.username || "User"}
@@ -78,7 +63,6 @@ function ResponsiveAppBar() {
               </Tooltip>
               <Menu
                 sx={{ mt: "45px" }}
-                id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 keepMounted
@@ -86,13 +70,12 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {user &&
-                  user._id &&
+                {user?._id &&
                   settings.map((setting, index) => (
                     <MenuItem
                       key={index}
                       onClick={handleCloseUserMenu}
-                      component="a"
+                      component={Link}
                       href={`${setting.link}/${user._id}`}
                     >
                       <Typography textAlign="center">

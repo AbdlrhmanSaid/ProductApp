@@ -15,16 +15,18 @@ const LoginPage = () => {
   } = useLogin();
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen bg-gray-100">
       {user ? (
-        <p>تم تسجيل الدخول بنجاح</p>
+        <p className="text-xl font-semibold text-green-600">
+          تم تسجيل الدخول بنجاح
+        </p>
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 p-6 border rounded-lg shadow-lg w-96"
+          className="flex flex-col gap-4 p-6 bg-white border rounded-lg shadow-lg w-96"
         >
           {errorMessage && (
-            <p className="bg-red-800 text-white text-center p-2 rounded-md">
+            <p className="bg-red-600 text-white text-center p-2 rounded-md">
               {errorMessage}
             </p>
           )}

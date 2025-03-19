@@ -6,13 +6,12 @@ import { useRouter } from "next/navigation";
 import ErrorLogin from "@/components/ErrorLogin";
 
 const CheckAuth = ({ children }) => {
-  const user = useSelector((state) => state.user.userData);
   const router = useRouter();
+  const user = useSelector((state) => state.user.userData);
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
     if (!user) {
-      setIsChecking(true);
       router.replace("/login");
     } else {
       setIsChecking(false);

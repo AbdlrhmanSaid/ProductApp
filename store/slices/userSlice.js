@@ -1,8 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+// تأخير إعادة تعيين `wrongTime`
+export const resetWrongTimeAfterDelay = createAsyncThunk(
+  "user/resetWrongTimeAfterDelay",
+  async (_, { dispatch }) => {
+    await new Promise((resolve) => setTimeout(resolve, 30000));
+    dispatch(setWrongTime(0));
+  }
+);
 
 const initialState = {
   userData: null,
   wrongTime: 0,
+  isLoading: false,
 };
 
 export const userSlice = createSlice({
@@ -14,19 +24,22 @@ export const userSlice = createSlice({
     },
     setWrongTime: (state, action) => {
       state.wrongTime = action.payload;
-
-      if (state.wrongTime >= 3) {
-        setTimeout(() => {
-          state.wrongTime = 0;
-        }, 60000);
-      }
     },
     logoutUser: (state) => {
       state.userData = null;
       state.wrongTime = 0;
     },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(resetWrongTimeAfterDelay.fulfilled, (state) => {
+      state.wrongTime = 0;
+    });
   },
 });
 
-export const { setUser, setWrongTime, logoutUser } = userSlice.actions;
+export const { setUser, setWrongTime, logoutUser, setIsLoading } =
+  userSlice.actions;
 export default userSlice.reducer;
