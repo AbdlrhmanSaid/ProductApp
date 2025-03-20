@@ -10,6 +10,7 @@ const LoginPage = () => {
     errorMessage,
     isLoading,
     isBlocked,
+    countdown,
     handleChange,
     handleSubmit,
   } = useLogin();
@@ -30,6 +31,7 @@ const LoginPage = () => {
               {errorMessage}
             </p>
           )}
+
           <input
             type="email"
             name="email"
@@ -58,7 +60,7 @@ const LoginPage = () => {
             disabled={isLoading || isBlocked}
           >
             {isBlocked
-              ? "محاولات محظورة"
+              ? `محاولات محظورة (${countdown} ثانية)`
               : isLoading
               ? "جاري تسجيل الدخول..."
               : "تسجيل الدخول"}

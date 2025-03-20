@@ -18,8 +18,8 @@ const useLogin = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
+  const [countdown, setCountdown] = useState(30);
 
-  // ✅ تحميل wrongTime من localStorage عند بدء التشغيل
   useEffect(() => {
     const storedWrongTime = localStorage.getItem("wrongTime");
     if (storedWrongTime) {
@@ -27,22 +27,28 @@ const useLogin = () => {
     }
   }, []);
 
-  // ✅ عند تجاوز 3 محاولات خاطئة، يتم الحظر
   useEffect(() => {
     if (wrongTime >= 3) {
       setIsBlocked(true);
-      setErrorMessage("تم حظر المحاولات لمدة دقيقة بسبب 3 محاولات خاطئة.");
+      setErrorMessage("تم حظر المحاولات لمدة 30 ثانية بسبب 3 محاولات خاطئة.");
+      setCountdown(30);
 
-      setTimeout(() => {
-        setLocalWrongTime(0);
-        localStorage.setItem("wrongTime", "0");
-        setIsBlocked(false);
-        setErrorMessage("");
-      }, 60000);
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev === 1) {
+            clearInterval(timer);
+            setIsBlocked(false);
+            setLocalWrongTime(0);
+            localStorage.setItem("wrongTime", "0");
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
     }
   }, [wrongTime]);
 
-  // ✅ إذا كان المستخدم مسجل دخول، انتقل إلى الصفحة الرئيسية
   useEffect(() => {
     if (user) {
       router.push("/");
@@ -104,6 +110,7 @@ const useLogin = () => {
     errorMessage,
     isLoading,
     isBlocked,
+    countdown,
     handleChange,
     handleSubmit,
   };
