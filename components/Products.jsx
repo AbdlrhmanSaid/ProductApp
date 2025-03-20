@@ -5,7 +5,6 @@ import Loading from "./Loading";
 import useProducts from "../hooks/useProducts";
 import AlertMsg from "./AlertMsg";
 
-// Lazy Load Components
 const Card = lazy(() => import("./Card"));
 const Categories = lazy(() => import("./Categories"));
 const DialogWindow = lazy(() => import("./Dialog"));
@@ -30,16 +29,18 @@ export default function Products() {
   }, []);
 
   return (
-    <div>
+    <div className="container mx-auto p-4">
       {position === "owner" && <SpeedDial />}
 
-      <input
-        type="search"
-        placeholder="بحث"
-        className="p-3 w-full md:w-3/4 rounded shadow-lg my-3"
-        onChange={(e) => setSearch(e.target.value)}
-        value={search}
-      />
+      <div className="flex justify-center mb-6">
+        <input
+          type="search"
+          placeholder="بحث عن منتج..."
+          className="w-full md:w-3/4 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+        />
+      </div>
 
       {loading ? (
         <Loading />
@@ -54,7 +55,7 @@ export default function Products() {
           </Suspense>
 
           {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
                 <Card
                   key={product._id}
@@ -65,7 +66,7 @@ export default function Products() {
               ))}
             </div>
           ) : (
-            <AlertMsg msg="لا يوجد منتجات" />
+            <AlertMsg msg="لم يتم العثور على منتجات." />
           )}
 
           {open && (

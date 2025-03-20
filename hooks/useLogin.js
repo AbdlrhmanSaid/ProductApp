@@ -11,7 +11,7 @@ const useLogin = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { userData } = useSelector((state) => state.user);
-  const user = userData;
+  const user = userData || JSON.parse(sessionStorage.getItem("user_data"));
 
   const [wrongTime, setLocalWrongTime] = useState(0);
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -51,9 +51,10 @@ const useLogin = () => {
 
   useEffect(() => {
     if (user) {
+      dispatch(setUser(user));
       router.push("/");
     }
-  }, [user, router]);
+  }, [user, router, dispatch]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -66,6 +67,14 @@ const useLogin = () => {
     setErrorMessage("");
     setIsLoading(true);
 
+    // التحقق من صحة البريد الإلكتروني
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setErrorMessage("يرجى إدخال بريد إلكتروني صالح");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post(
         "https://nodeproject-production-dc03.up.railway.app/getUserByEmail",
@@ -76,6 +85,7 @@ const useLogin = () => {
       if (!userData.password) {
         setErrorMessage("المستخدم غير موجود");
         updateWrongTime();
+        setIsLoading(false);
         return;
       }
 
@@ -84,8 +94,12 @@ const useLogin = () => {
       if (!match) {
         setErrorMessage("كلمة المرور غير صحيحة");
         updateWrongTime();
+        setIsLoading(false);
         return;
       }
+
+      // حذف كلمة المرور قبل تخزين البيانات
+      delete userData.password;
 
       dispatch(setUser(userData));
       sessionStorage.setItem("user_data", JSON.stringify(userData));

@@ -16,7 +16,7 @@ const LoginPage = () => {
   } = useLogin();
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex items-center justify-center h-screen bg-white">
       {user ? (
         <p className="text-xl font-semibold text-green-600">
           تم تسجيل الدخول بنجاح
@@ -24,8 +24,12 @@ const LoginPage = () => {
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 p-6 bg-white border rounded-lg shadow-lg w-96"
+          className="flex flex-col gap-4 p-6 bg-white border border-gray-300 rounded-lg shadow-md w-96"
         >
+          <h2 className="text-center text-2xl font-bold text-[#1976D2]">
+            تسجيل الدخول
+          </h2>
+
           {errorMessage && (
             <p className="bg-red-600 text-white text-center p-2 rounded-md">
               {errorMessage}
@@ -39,7 +43,7 @@ const LoginPage = () => {
             onChange={handleChange}
             required
             placeholder="أدخل البريد الإلكتروني"
-            className="p-2 border rounded-md"
+            className="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#1976D2] focus:outline-none"
             disabled={isLoading || isBlocked}
           />
           <input
@@ -49,13 +53,16 @@ const LoginPage = () => {
             onChange={handleChange}
             required
             placeholder="أدخل كلمة المرور"
-            className="p-2 border rounded-md"
+            className="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#1976D2] focus:outline-none"
             disabled={isLoading || isBlocked}
           />
+
           <button
             type="submit"
-            className={`p-2 text-white rounded-md ${
-              isBlocked ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-600"
+            className={`p-3 text-white rounded-md transition duration-300 ${
+              isBlocked
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#1976D2] hover:bg-[#1565C0]"
             }`}
             disabled={isLoading || isBlocked}
           >

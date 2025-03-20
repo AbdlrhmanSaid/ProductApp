@@ -9,7 +9,10 @@ export const resetWrongTimeAfterDelay = createAsyncThunk(
 );
 
 const initialState = {
-  userData: null,
+  userData:
+    typeof window !== "undefined"
+      ? JSON.parse(sessionStorage.getItem("user_data")) || null
+      : null,
   wrongTime: 0,
   isLoading: false,
 };

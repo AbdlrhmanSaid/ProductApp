@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "@/store/slices/userSlice";
@@ -32,10 +32,16 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => setAnchorElUser(null);
 
   const signOut = () => {
+    handleCloseUserMenu(); // إغلاق القائمة قبل تسجيل الخروج
     sessionStorage.removeItem("user_data");
     dispatch(logoutUser());
     router.push("/login");
   };
+
+  // التأكد من إغلاق القائمة عند تغيير حالة المستخدم
+  useEffect(() => {
+    setAnchorElUser(null);
+  }, [user]);
 
   return (
     <AppBar position="static">

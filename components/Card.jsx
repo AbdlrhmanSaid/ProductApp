@@ -25,27 +25,27 @@ export default function ProductCard({ product, handleOpen, position }) {
         <span>{product.category}</span>
       </h1>
 
-      <div className="flex justify-between mt-3">
+      <div className="flex justify-between mt-3 gap-1 flex-wrap">
         {position === "admin" ||
           (position === "owner" && (
             <button
               onClick={() => handleOpen(product)}
-              className="bg-red-500 text-white px-4 py-2 rounded"
+              className="bg-red-500 text-white px-4 py-2 rounded w-full"
             >
-              <MdDelete />
+              <MdDelete className="m-auto" />
             </button>
           ))}
 
-        <Link href={`product/${product._id}`}>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded">
+        <Link href={`product/${product._id}`} className="w-full">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded w-full text-center">
             Visit
           </button>
         </Link>
         {position === "admin" ||
           (position === "owner" && (
-            <Link href={`/edit-product/${product._id}`}>
-              <button className="bg-green-500 text-white px-4 py-2 rounded">
-                <MdEdit />
+            <Link href={`/edit-product/${product._id}`} className="w-full">
+              <button className="bg-green-500 text-white px-4 py-2 rounded w-full h-full">
+                <MdEdit className="m-auto" />
               </button>
             </Link>
           ))}
