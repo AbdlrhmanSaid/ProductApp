@@ -29,7 +29,7 @@ export default function Products() {
   }, []);
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4" id="products">
       {position === "owner" && <SpeedDial />}
 
       <div className="flex justify-center mb-6">

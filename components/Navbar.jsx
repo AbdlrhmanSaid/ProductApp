@@ -3,104 +3,104 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
+import { IoPerson, IoLogOutOutline, IoMenu } from "react-icons/io5";
+import { MdInventory, MdPeople } from "react-icons/md";
 import { logoutUser } from "@/store/slices/userSlice";
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  IconButton,
-  Typography,
-  Menu,
-  Container,
-  Avatar,
-  Tooltip,
-  MenuItem,
-  Button,
-} from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-
-const settings = [{ label: "الملف الشخصي", link: "/profile" }];
 
 function ResponsiveAppBar() {
   const dispatch = useDispatch();
   const router = useRouter();
   const reduxUser = useSelector((state) => state.user.userData);
   const [user, setUser] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     setUser(reduxUser);
   }, [reduxUser]);
 
-  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
-  const handleCloseUserMenu = () => setAnchorElUser(null);
-
   const signOut = () => {
-    handleCloseUserMenu();
     sessionStorage.removeItem("user_data");
     dispatch(logoutUser());
     router.push("/login");
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
-            <Link href="/">
-              <Image src="/favicon.png" width={100} height={50} alt="Logo" />
-            </Link>
-          </Box>
+    <nav className="bg-[#1976D2] p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <Link href="/">
+          <Image src="/favicon.png" width={100} height={50} alt="Logo" />
+        </Link>
 
-          {user === null ? null : !user ? (
-            <Button className="bg-white" component={Link} href="/login">
-              تسجيل الدخول
-            </Button>
-          ) : (
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="الإعدادات">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    alt={user.username || "User"}
-                    src={user.avatar || ""}
-                  />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                anchorEl={anchorElUser}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                keepMounted
-                transformOrigin={{ vertical: "top", horizontal: "right" }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+        {user ? (
+          <>
+            <div className="hidden md:flex space-x-6">
+              <Link
+                href="/#products"
+                className="text-white flex items-center gap-2"
               >
-                {user?._id &&
-                  settings.map((setting, index) => (
-                    <MenuItem
-                      key={index}
-                      onClick={handleCloseUserMenu}
-                      component={Link}
-                      href={`${setting.link}/${user._id}`}
-                    >
-                      <Typography textAlign="center">
-                        {setting.label}
-                      </Typography>
-                    </MenuItem>
-                  ))}
+                <MdInventory />
+                المنتجات
+              </Link>
+              <Link
+                href="/#users"
+                className="text-white flex items-center gap-2"
+              >
+                <MdPeople />
+                المستخدمون
+              </Link>
+            </div>
 
-                <MenuItem onClick={signOut}>
-                  <Typography textAlign="center" color="error">
-                    تسجيل الخروج
-                  </Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
-          )}
-        </Toolbar>
-      </Container>
-    </AppBar>
+            {/* User Actions */}
+            <div className="hidden md:flex space-x-4">
+              <Link href={`/profile/${user._id}`} className="text-white">
+                <IoPerson className="w-7 h-7" />
+              </Link>
+              <button onClick={signOut} className="text-white">
+                <IoLogOutOutline className="w-7 h-7" />
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden text-white"
+              onClick={() => setMenuOpen(!isMenuOpen)}
+            >
+              <IoMenu className="w-7 h-7" />
+            </button>
+          </>
+        ) : (
+          <Link
+            href="/login"
+            className="text-white border border-white px-4 py-2 rounded"
+          >
+            تسجيل الدخول
+          </Link>
+        )}
+      </div>
+
+      {isMenuOpen && user && (
+        <div className="md:hidden  p-4 mt-2 space-y-3 text-center">
+          <Link href="/#products" className="block text-white">
+            المنتجات
+          </Link>
+          <Link href="/#users" className="block text-white">
+            المستخدمون
+          </Link>
+          <Link href={`/profile/${user._id}`} className="block text-white">
+            الملف الشخصي
+          </Link>
+          <button
+            onClick={signOut}
+            className="block text-white w-full text-center"
+          >
+            <IoLogOutOutline className="m-auto h-7 w-7" />
+          </button>
+        </div>
+      )}
+    </nav>
   );
 }
 

@@ -4,6 +4,7 @@ import useProduct from "@/hooks/useProduct";
 import Loading from "@/components/Loading";
 import { QRCodeCanvas } from "qrcode.react";
 import CheckAuth from "@/auth/checkAuth";
+import Image from "next/image";
 
 const Page = ({ params }) => {
   const safeParams = use(params) || {};

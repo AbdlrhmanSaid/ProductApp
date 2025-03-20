@@ -30,20 +30,20 @@ export default function ProductCard({ product, handleOpen, position }) {
           (position === "owner" && (
             <button
               onClick={() => handleOpen(product)}
-              className="bg-red-500 text-white px-4 py-2 rounded w-full"
+              className="bg-red-500 text-white px-4 py-2 rounded w-[25%]"
             >
               <MdDelete className="m-auto" />
             </button>
           ))}
 
-        <Link href={`product/${product._id}`} className="w-full">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded w-full text-center">
+        <Link href={`product/${product._id}`} className="w-[25%]">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded w-full text-center text-sm">
             Visit
           </button>
         </Link>
         {position === "admin" ||
           (position === "owner" && (
-            <Link href={`/edit-product/${product._id}`} className="w-full">
+            <Link href={`/edit-product/${product._id}`} className="w-[25%]">
               <button className="bg-green-500 text-white px-4 py-2 rounded w-full h-full">
                 <MdEdit className="m-auto" />
               </button>

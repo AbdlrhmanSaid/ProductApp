@@ -2,6 +2,7 @@
 
 import { useSelector } from "react-redux";
 import { lazy, Suspense } from "react";
+import { IoPerson } from "react-icons/io5";
 
 const ErrorLogin = lazy(() => import("@/components/ErrorLogin"));
 const Loading = lazy(() => import("@/components/Loading"));
@@ -27,11 +28,7 @@ const ProfilePage = () => {
             </h1>
 
             <div className="flex flex-col items-center">
-              <img
-                src={user?.avatar || "/default-avatar.png"}
-                alt="صورة المستخدم"
-                className="w-24 h-24 rounded-full border-4 border-[#1976D2] shadow-md"
-              />
+              <IoPerson className="w-24 h-24 rounded-full border-4 bg-[#1976D2] border-[#1976D2] shadow-md text-white" />
 
               <div className="mt-4 text-center space-y-3">
                 <p className="text-lg text-gray-700">

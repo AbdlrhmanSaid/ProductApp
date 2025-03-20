@@ -17,14 +17,17 @@ const UsersTable = () => {
     setSearch,
   } = useUsers();
 
-  const position = useSelector((state) => state.user.userData?.position); // جلب دور المستخدم
+  const position = useSelector((state) => state.user.userData?.position);
 
   if (position !== "admin" && position !== "owner") {
     return;
   }
 
   return (
-    <div className="container mx-auto mt-5 bg-white p-3 rounded shadow">
+    <div
+      className="container mx-auto mt-5 bg-white p-3 rounded shadow"
+      id="users"
+    >
       <h1 className="text-3xl font-bold mb-4">قائمة المستخدمين</h1>
       <input
         type="search"
