@@ -11,7 +11,7 @@ const useLogin = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { userData } = useSelector((state) => state.user);
-  const user = userData || JSON.parse(sessionStorage.getItem("user_data"));
+  const [user, setUserState] = useState(null); // تم استبدال جلب البيانات المباشر بـ useState
 
   const [wrongTime, setLocalWrongTime] = useState(0);
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -19,6 +19,18 @@ const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [countdown, setCountdown] = useState(30);
+
+  // جلب بيانات المستخدم من sessionStorage بعد تحميل الصفحة
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = sessionStorage.getItem("user_data");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        setUserState(parsedUser);
+        dispatch(setUser(parsedUser));
+      }
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     const storedWrongTime = localStorage.getItem("wrongTime");
@@ -51,10 +63,9 @@ const useLogin = () => {
 
   useEffect(() => {
     if (user) {
-      dispatch(setUser(user));
       router.push("/");
     }
-  }, [user, router, dispatch]);
+  }, [user, router]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -102,7 +113,9 @@ const useLogin = () => {
       delete userData.password;
 
       dispatch(setUser(userData));
-      sessionStorage.setItem("user_data", JSON.stringify(userData));
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("user_data", JSON.stringify(userData));
+      }
       router.push("/");
     } catch (error) {
       setErrorMessage("حدث خطأ، حاول مرة أخرى لاحقًا.");
