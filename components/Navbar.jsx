@@ -25,23 +25,23 @@ const settings = [{ label: "الملف الشخصي", link: "/profile" }];
 function ResponsiveAppBar() {
   const dispatch = useDispatch();
   const router = useRouter();
-  const user = useSelector((state) => state.user.userData);
+  const reduxUser = useSelector((state) => state.user.userData);
+  const [user, setUser] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+
+  useEffect(() => {
+    setUser(reduxUser);
+  }, [reduxUser]);
 
   const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
   const handleCloseUserMenu = () => setAnchorElUser(null);
 
   const signOut = () => {
-    handleCloseUserMenu(); // إغلاق القائمة قبل تسجيل الخروج
+    handleCloseUserMenu();
     sessionStorage.removeItem("user_data");
     dispatch(logoutUser());
     router.push("/login");
   };
-
-  // التأكد من إغلاق القائمة عند تغيير حالة المستخدم
-  useEffect(() => {
-    setAnchorElUser(null);
-  }, [user]);
 
   return (
     <AppBar position="static">
@@ -53,7 +53,7 @@ function ResponsiveAppBar() {
             </Link>
           </Box>
 
-          {!user ? (
+          {user === null ? null : !user ? (
             <Button className="bg-white" component={Link} href="/login">
               تسجيل الدخول
             </Button>
