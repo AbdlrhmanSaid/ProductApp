@@ -29,7 +29,7 @@ const FloatingButtons = () => {
   ];
 
   return (
-    <div className="fixed bottom-6 right-6 flex flex-col items-end gap-3">
+    <div className="fixed bottom-6 right-6 flex flex-col items-end gap-3 z-50">
       <button
         onClick={toggleButtons}
         className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition duration-300"

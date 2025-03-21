@@ -82,17 +82,32 @@ function ResponsiveAppBar() {
 
       {isMenuOpen && user && (
         <div className="md:hidden  p-4 mt-2 space-y-3 text-center">
-          <Link href="/#products" className="block text-white">
+          <Link
+            href="/#products"
+            className="block text-white"
+            onClick={() => setMenuOpen(false)}
+          >
             المنتجات
           </Link>
-          <Link href="/#users" className="block text-white">
+          <Link
+            href="/#users"
+            className="block text-white"
+            onClick={() => setMenuOpen(false)}
+          >
             المستخدمون
           </Link>
-          <Link href={`/profile/${user._id}`} className="block text-white">
+          <Link
+            href={`/profile/${user._id}`}
+            className="block text-white"
+            onClick={() => setMenuOpen(false)}
+          >
             الملف الشخصي
           </Link>
           <button
-            onClick={signOut}
+            onClick={() => {
+              signOut();
+              setMenuOpen(false);
+            }}
             className="block text-white w-full text-center"
           >
             <IoLogOutOutline className="m-auto h-7 w-7" />
