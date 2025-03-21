@@ -27,12 +27,10 @@ export default function EditProduct() {
 
   return (
     <CheckAuth>
-      <div className="h-screen flex justify-between items-center">
-        <div className="max-w-lg mx-auto bg-white p-5 rounded shadow">
+      <div className="h-screen flex justify-center items-center">
+        <div className="max-w-lg w-full bg-white p-5 rounded shadow">
           <h1 className="text-2xl font-bold mb-5 flex items-center gap-1 justify-center">
-            <span>
-              <MdEdit />
-            </span>
+            <MdEdit />
             <span>تعديل المنتج</span>
           </h1>
           <form onSubmit={updateProduct} className="space-y-3">
@@ -42,7 +40,7 @@ export default function EditProduct() {
               value={product?.title}
               onChange={handleChange}
               placeholder="اسم المنتج"
-              className="border p-2 w-full"
+              className="border p-2 w-full rounded"
             />
             <input
               type="number"
@@ -51,7 +49,7 @@ export default function EditProduct() {
               onChange={handlePriceChange}
               onBlur={handleBlur}
               placeholder="السعر"
-              className="border p-2 w-full"
+              className="border p-2 w-full rounded"
               min="0"
             />
             <input
@@ -60,7 +58,7 @@ export default function EditProduct() {
               value={product?.category}
               onChange={handleChange}
               placeholder="التصنيف"
-              className="border p-2 w-full"
+              className="border p-2 w-full rounded"
             />
             <input
               type="text"
@@ -68,7 +66,7 @@ export default function EditProduct() {
               value={product?.image}
               onChange={handleChange}
               placeholder="رابط الصورة"
-              className="border p-2 w-full"
+              className="border p-2 w-full rounded"
             />
             <input
               type="number"
@@ -76,13 +74,15 @@ export default function EditProduct() {
               value={product?.quantity}
               onChange={handleQuantityChange}
               placeholder="الكمية"
-              className="border p-2 w-full"
+              className="border p-2 w-full rounded"
+              min="1"
             />
             <button
               type="submit"
-              className="bg-green-500 text-white px-4 py-2 rounded"
+              className="bg-green-500 text-white px-4 py-2 rounded flex items-center justify-center w-full"
             >
-              <FaCheckCircle />
+              <FaCheckCircle className="mr-1" />
+              تحديث المنتج
             </button>
           </form>
         </div>

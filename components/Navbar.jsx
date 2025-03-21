@@ -29,7 +29,6 @@ function ResponsiveAppBar() {
   return (
     <nav className="bg-[#1976D2] p-4">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */}
         <Link href="/">
           <Image src="/favicon.png" width={100} height={50} alt="Logo" />
         </Link>

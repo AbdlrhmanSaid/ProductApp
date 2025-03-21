@@ -6,6 +6,7 @@ import axios from "axios";
 const useEditProduct = () => {
   const router = useRouter();
   const { id } = useParams();
+
   const [product, setProduct] = useState({
     title: "",
     price: "",
@@ -16,32 +17,55 @@ const useEditProduct = () => {
 
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      if (!id) return;
-      try {
-        setLoading(true);
-        const { data } = await axios.get(
-          `https://nodeproject-production-dc03.up.railway.app/getProducts/${id}`
-        );
-        setProduct((prev) => ({
-          ...prev,
-          ...data,
-          price: data.price.toString(),
-        }));
-      } catch (error) {
-        console.error("❌ خطأ في جلب المنتج:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
+  const fetchProduct = useCallback(async () => {
+    if (!id) return;
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        `https://nodeproject-production-dc03.up.railway.app/getProducts/${id}`
+      );
+      setProduct({
+        title: data.title || "",
+        price: data.price?.toString() || "0",
+        category: data.category || "",
+        image: data.image || "",
+        quantity: data.quantity || 1,
+      });
+    } catch (error) {
+      console.error("❌ خطأ في جلب المنتج:", error);
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [fetchProduct]);
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setProduct((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  const handlePriceChange = useCallback((e) => {
+    const { value } = e.target;
+    if (!isNaN(value) && value >= 0) {
+      setProduct((prev) => ({ ...prev, price: value }));
+    }
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    if (isNaN(parseFloat(product.price))) {
+      setProduct((prev) => ({ ...prev, price: "0" }));
+    }
+  }, [product]);
+
+  const handleQuantityChange = useCallback((e) => {
+    const { value } = e.target;
+    setProduct((prev) => ({
+      ...prev,
+      quantity: Math.max(1, parseInt(value, 10) || 1),
+    }));
   }, []);
 
   const updateProduct = useCallback(
@@ -69,7 +93,17 @@ const useEditProduct = () => {
     [product, id, router]
   );
 
-  return { product, loading, handleChange, updateProduct };
+  return {
+    product,
+    loading,
+    handleChange,
+    handlePriceChange,
+    handleBlur,
+    handleQuantityChange,
+    updateProduct,
+    fetchProduct,
+    id,
+  };
 };
 
 export default useEditProduct;
