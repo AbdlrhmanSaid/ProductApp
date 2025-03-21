@@ -1,6 +1,8 @@
 "use client";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { setUser } from "@/store/slices/userSlice";
 import { lazy, Suspense } from "react";
 import { IoPerson } from "react-icons/io5";
 
@@ -9,14 +11,34 @@ const Loading = lazy(() => import("@/components/Loading"));
 const CheckAuth = lazy(() => import("@/auth/checkAuth"));
 
 const ProfilePage = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.userData);
+  const isLoading = useSelector((state) => state.user.isLoading);
 
-  if (!user)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = sessionStorage.getItem("user_data");
+      if (storedUser) {
+        dispatch(setUser(JSON.parse(storedUser)));
+      }
+    }
+  }, [dispatch]);
+
+  if (isLoading) {
+    return (
+      <Suspense fallback={<Loading />}>
+        <Loading />
+      </Suspense>
+    );
+  }
+
+  if (!user) {
     return (
       <Suspense fallback={<Loading />}>
         <ErrorLogin />
       </Suspense>
     );
+  }
 
   return (
     <Suspense fallback={<Loading />}>
