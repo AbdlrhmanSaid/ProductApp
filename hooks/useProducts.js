@@ -1,8 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 import ErrorPage from "@/components/ErrorPage";
 import { useSelector } from "react-redux";
+
+const API_BASE_URL = "https://nodeproject-production-dc03.up.railway.app";
 
 const useProducts = () => {
   const [products, setProducts] = useState([]);
@@ -15,56 +17,61 @@ const useProducts = () => {
   const user = useSelector((state) => state.user.userData);
   const position = user?.position;
 
-  const fetchProducts = async () => {
-    try {
-      const res = await axios.get(
-        "https://nodeproject-production-dc03.up.railway.app/getProducts",
-        { mode: "cors" }
-      );
-      setProducts(res.data);
-      setLoading(false);
-    } catch (err) {
-      setError(err);
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { data } = await axios.get(`${API_BASE_URL}/getProducts`);
+        setProducts(data);
+      } catch (err) {
+        console.error("❌ خطأ في جلب المنتجات:", err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleOpen = (product) => {
+    fetchProducts();
+  }, []);
+
+  const handleOpen = useCallback((product) => {
     setSelectedProduct(product);
     setOpen(true);
-  };
+  }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
     setSelectedProduct(null);
-  };
+  }, []);
 
-  const deleteProduct = async () => {
+  const deleteProduct = useCallback(async () => {
     if (!selectedProduct) return;
     try {
       await axios.delete(
-        `https://nodeproject-production-dc03.up.railway.app/deleteProduct/${selectedProduct._id}`
+        `${API_BASE_URL}/deleteProduct/${selectedProduct._id}`
       );
-      setProducts(
-        products.filter((product) => product._id !== selectedProduct._id)
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product._id !== selectedProduct._id)
       );
       handleClose();
     } catch (err) {
       console.error("❌ خطأ في حذف المنتج:", err);
     }
-  };
+  }, [selectedProduct, handleClose]);
 
-  const categories = products.map((product) => product.category.toUpperCase());
-  const uniqueCategories = [...new Set(categories)];
+  const uniqueCategories = useMemo(() => {
+    return [
+      ...new Set(products.map((product) => product.category.toUpperCase())),
+    ];
+  }, [products]);
 
-  const filteredProducts =
-    search !== ""
-      ? products.filter(
-          (product) =>
-            product.title.toLowerCase().includes(search.toLowerCase()) ||
-            product.category.toLowerCase().includes(search.toLowerCase())
-        )
-      : products;
+  const filteredProducts = useMemo(() => {
+    if (!search) return products;
+    return products.filter(
+      (product) =>
+        product.title.toLowerCase().includes(search.toLowerCase()) ||
+        product.category.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [products, search]);
 
   if (error) {
     return <ErrorPage error={error} />;
@@ -74,19 +81,15 @@ const useProducts = () => {
     products,
     setProducts,
     loading,
-    setLoading,
     search,
     setSearch,
     open,
     selectedProduct,
-    setSelectedProduct,
     error,
-    setError,
-    fetchProducts,
+    fetchProducts: () => {},
     handleOpen,
     handleClose,
     deleteProduct,
-    categories,
     uniqueCategories,
     filteredProducts,
     position,

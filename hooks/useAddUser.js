@@ -1,10 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
 const useAddUser = () => {
-  const baseUrl = "https://nodeproject-production-dc03.up.railway.app";
+  const baseUrl = useMemo(
+    () => "https://nodeproject-production-dc03.up.railway.app",
+    []
+  );
+
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -18,39 +22,53 @@ const useAddUser = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleChange = useCallback((e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const validateForm = useCallback(() => {
+    const { username, email, password, confirmPassword } = formData;
 
-    if (formData.password !== formData.confirmPassword) {
+    if (!username || !email || !password || !confirmPassword) {
+      setError("يجب ملء جميع الحقول.");
+      return false;
+    }
+    if (password !== confirmPassword) {
       setError("كلمة المرور وتأكيد كلمة المرور غير متطابقين.");
-      return;
+      return false;
     }
+    return true;
+  }, [formData]);
 
-    try {
-      setLoading(true);
-      setError("");
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!validateForm()) return;
 
-      const newUser = {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-        position: formData.position,
-      };
+      try {
+        setLoading(true);
+        setError("");
 
-      await axios.post(`${baseUrl}/postUser`, newUser);
+        const { username, email, password, position } = formData;
 
-      router.push("/");
-    } catch (err) {
-      setError(err.response?.data?.message || "حدث خطأ أثناء إنشاء المستخدم.");
-    } finally {
-      setLoading(false);
-    }
-  };
+        await axios.post(`${baseUrl}/postUser`, {
+          username,
+          email,
+          password,
+          position,
+        });
+
+        router.push("/");
+      } catch (err) {
+        setError(
+          err.response?.data?.message || "حدث خطأ أثناء إنشاء المستخدم."
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [formData, baseUrl, router, validateForm]
+  );
 
   return {
     formData,

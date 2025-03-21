@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
@@ -8,53 +9,59 @@ const useUsers = () => {
   const [open, setOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [search, setSearch] = useState("");
+
   const user = useSelector((state) => state.user.userData);
   const position = user?.position;
 
   const baseUrl = "https://nodeproject-production-dc03.up.railway.app";
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const response = await axios.get(`${baseUrl}/getUsers`);
       setUsers(response.data);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("خطأ في جلب المستخدمين:", error);
     }
-  };
+  }, []);
 
-  const confirmDelete = (id) => {
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  const confirmDelete = useCallback((id) => {
     setUserToDelete(id);
     setOpen(true);
-  };
+  }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
     setUserToDelete(null);
-  };
+  }, []);
 
-  const deleteUser = async () => {
+  const deleteUser = useCallback(async () => {
     if (!userToDelete) return;
     try {
       await axios.delete(`${baseUrl}/deleteUser/${userToDelete}`);
-      setUsers(users.filter((user) => user._id !== userToDelete));
+      setUsers((prevUsers) =>
+        prevUsers.filter((user) => user._id !== userToDelete)
+      );
       handleClose();
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.error("خطأ في حذف المستخدم:", error);
     }
-  };
+  }, [userToDelete, handleClose]);
 
-  const filteredUsers =
-    search !== ""
-      ? users.filter(
-          (user) =>
-            user.username.toLowerCase().includes(search.toLowerCase()) ||
-            user.email.toLowerCase().includes(search.toLowerCase()) ||
-            user.position.toLowerCase().includes(search.toLowerCase())
-        )
-      : users;
+  const filteredUsers = useMemo(() => {
+    if (!search) return users;
+    const lowerCaseSearch = search.toLowerCase();
+    return users.filter(
+      (user) =>
+        user.username.toLowerCase().includes(lowerCaseSearch) ||
+        user.email.toLowerCase().includes(lowerCaseSearch) ||
+        user.position.toLowerCase().includes(lowerCaseSearch)
+    );
+  }, [search, users]);
+
   return {
     search,
     setSearch,
