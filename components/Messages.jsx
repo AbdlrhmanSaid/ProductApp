@@ -1,62 +1,53 @@
 import React from "react";
-import useMesaage from "@/hooks/useMesaage";
+import useMessage from "@/hooks/useMessage";
 import Loading from "./Loading";
-import { FaUser, FaClock, FaInfoCircle } from "react-icons/fa";
+import Msg from "./Msg";
+import AlertMsg from "./AlertMsg";
 
 const Messages = () => {
-  const { message, loading } = useMesaage();
+  const { message = [], loading } = useMessage();
+  const userMsg = message.filter((msg) => msg.user !== "stand");
+  const standMsg = message.filter((msg) => msg.user === "stand");
 
   return (
-    <div className="container mx-auto mt-5 bg-white p-5 rounded-lg shadow-md max-w-2xl">
-      <h1 className="text-3xl font-bold mb-4 text-center text-[#1976D2]">
+    <div
+      id="msgs"
+      className="container mx-auto mt-5 bg-white p-6 rounded-lg shadow-lg "
+    >
+      <h1 className="text-3xl font-extrabold mb-6 text-center text-[#1976D2]">
         التفاصيل
       </h1>
 
       {loading ? (
         <Loading />
-      ) : message.length > 0 ? (
-        <div className="space-y-4">
-          {message.map((msg) => {
-            const formattedTime = new Date(msg.time).toLocaleString("ar-EG", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-              hour12: true,
-            });
-
-            return (
-              <div
-                key={msg._id}
-                className="bg-gray-100 p-4 rounded-lg shadow-sm border-l-4 border-[#1976D2]"
-              >
-                <p className="text-lg font-semibold flex items-center gap-2">
-                  <FaUser className="text-[#1976D2]" /> {msg.user}
-                </p>
-                <p className="text-gray-600 flex items-center gap-2">
-                  <FaInfoCircle className="text-[#F59E0B]" />{" "}
-                  {msg.action == "increase"
-                    ? "زياده في الوزن"
-                    : msg.action == "Decrease"
-                    ? "نفص  في الوزن"
-                    : msg.action}
-                  -{" "}
-                  {msg.info == Number(msg.info)
-                    ? msg.info / 1000 + " كيلو"
-                    : msg.info}
-                </p>
-                <p className="text-gray-500 text-sm flex items-center gap-2">
-                  <FaClock className="text-[#6B7280]" /> {formattedTime}
-                </p>
-              </div>
-            );
-          })}
-        </div>
       ) : (
-        <p className="text-gray-500 text-center">لا توجد رسائل متاحة</p>
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1 p-4 bg-gray-100 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold text-[#1565C0] border-b-2 pb-2 mb-3">
+              رسائل من المخزن
+            </h2>
+            <div className="space-y-3 h-60 overflow-y-auto p-2">
+              {standMsg.length > 0 ? (
+                standMsg.map((msg) => <Msg key={msg._id} msg={msg} />)
+              ) : (
+                <AlertMsg msg="لا توجد رسائل من المخزن" />
+              )}
+            </div>
+          </div>
+
+          <div className="flex-1 p-4 bg-gray-100 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold text-[#1565C0] border-b-2 pb-2 mb-3">
+              رسائل من المستخدمين
+            </h2>
+            <div className="space-y-3 h-60 overflow-y-auto p-2">
+              {userMsg.length > 0 ? (
+                userMsg.map((msg) => <Msg key={msg._id} msg={msg} />)
+              ) : (
+                <AlertMsg msg="لا توجد رسائل من المستخدمين" />
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

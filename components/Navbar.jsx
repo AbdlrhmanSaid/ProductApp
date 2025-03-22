@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { IoPerson, IoLogOutOutline, IoMenu } from "react-icons/io5";
 import { MdInventory, MdPeople } from "react-icons/md";
+import { BiMessageDetail } from "react-icons/bi";
 import { logoutUser } from "@/store/slices/userSlice";
 import Image from "next/image";
 import Link from "next/link";
@@ -50,9 +51,14 @@ function ResponsiveAppBar() {
                 <MdPeople />
                 المستخدمون
               </Link>
+              <Link
+                href="/#msgs"
+                className="text-white flex items-center gap-2"
+              >
+                <BiMessageDetail />
+                التفاصيل
+              </Link>
             </div>
-
-            {/* User Actions */}
             <div className="hidden md:flex space-x-4">
               <Link href={`/profile/${user._id}`} className="text-white">
                 <IoPerson className="w-7 h-7" />
@@ -61,8 +67,6 @@ function ResponsiveAppBar() {
                 <IoLogOutOutline className="w-7 h-7" />
               </button>
             </div>
-
-            {/* Mobile Menu Button */}
             <button
               className="md:hidden text-white"
               onClick={() => setMenuOpen(!isMenuOpen)}
@@ -84,24 +88,27 @@ function ResponsiveAppBar() {
         <div className="md:hidden  p-4 mt-2 space-y-3 text-center">
           <Link
             href="/#products"
-            className="block text-white"
+            className="text-white flex items-center gap-2"
             onClick={() => setMenuOpen(false)}
           >
+            <MdInventory />
             المنتجات
           </Link>
           <Link
             href="/#users"
-            className="block text-white"
+            className="text-white flex items-center gap-2"
             onClick={() => setMenuOpen(false)}
           >
+            <MdPeople />
             المستخدمون
           </Link>
           <Link
-            href={`/profile/${user._id}`}
-            className="block text-white"
+            href="/#msgs"
+            className="text-white flex items-center gap-2"
             onClick={() => setMenuOpen(false)}
           >
-            الملف الشخصي
+            <BiMessageDetail />
+            التفاصيل
           </Link>
           <button
             onClick={() => {
