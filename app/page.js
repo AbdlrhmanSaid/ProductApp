@@ -5,6 +5,7 @@ import Loading from "@/components/Loading";
 
 const Products = lazy(() => import("@/components/Products"));
 const UsersTable = lazy(() => import("@/components/UsersTable"));
+const Messages = lazy(() => import("@/components/Messages"));
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <Suspense fallback={<Loading />}>
         <Products />
         <UsersTable />
+        <Messages />
       </Suspense>
     </CheckAuth>
   );

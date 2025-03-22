@@ -56,7 +56,7 @@ const Page = ({ params }) => {
 
   return (
     <CheckAuth>
-      <div className="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg flex flex-col md:flex-row gap-6">
+      <div className="h-screen container mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg flex flex-col md:flex-row gap-6 ">
         <div className="md:w-1/2 w-full flex justify-center">
           <img
             src={product.image || "/placeholder.png"}
