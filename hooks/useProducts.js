@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 import ErrorPage from "@/components/ErrorPage";
 import { useSelector } from "react-redux";
+import sendMessage from "@/utils/sendMessage";
 
 const API_BASE_URL = "https://nodeproject-production-dc03.up.railway.app";
 
@@ -49,9 +50,15 @@ const useProducts = () => {
       await axios.delete(
         `${API_BASE_URL}/deleteProduct/${selectedProduct._id}`
       );
+
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product._id !== selectedProduct._id)
       );
+      await sendMessage({
+        user: user.username,
+        action: "حذف منتج",
+        info: `${user.email} `,
+      });
       handleClose();
     } catch (err) {
       console.error("❌ خطأ في حذف المنتج:", err);

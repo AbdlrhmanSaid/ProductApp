@@ -43,10 +43,10 @@ export default function Products() {
       </div>
 
       {loading ? (
-        <Loading />
+        <Loading title={"تحميل المنتجات"} />
       ) : (
         <>
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={<Loading title={"تحميل الفئات"} />}>
             <Categories
               setSearch={setSearch}
               uniqueCategories={uniqueCategories}
@@ -70,7 +70,7 @@ export default function Products() {
           )}
 
           {open && (
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<Loading title={"تحميل النافذة"} />}>
               <DialogWindow
                 deleteFunc={deleteProduct}
                 open={open}

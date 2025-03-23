@@ -6,8 +6,8 @@ import AlertMsg from "./AlertMsg";
 
 const Messages = () => {
   const { message = [], loading } = useMessage();
-  const userMsg = message.filter((msg) => msg.user !== "stand");
-  const standMsg = message.filter((msg) => msg.user === "stand");
+  const userMsg = message.reverse().filter((msg) => msg.user !== "stand");
+  const standMsg = message.reverse().filter((msg) => msg.user === "stand");
 
   return (
     <div
@@ -19,7 +19,7 @@ const Messages = () => {
       </h1>
 
       {loading ? (
-        <Loading />
+        <Loading title={"الرسائل"} />
       ) : (
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1 p-4 bg-gray-100 rounded-lg shadow-md">

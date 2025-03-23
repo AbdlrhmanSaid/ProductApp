@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, setWrongTime } from "@/store/slices/userSlice";
 import { useRouter } from "next/navigation";
+import sendMessage from "@/utils/sendMessage";
 
 const useLogin = () => {
   const dispatch = useDispatch();
@@ -92,6 +93,7 @@ const useLogin = () => {
       }
 
       try {
+        const action = "تسجيل دخول";
         const response = await axios.post(
           "https://nodeproject-production-dc03.up.railway.app/getUserByEmail",
           { email: formData.email }
@@ -123,7 +125,15 @@ const useLogin = () => {
         if (typeof window !== "undefined") {
           sessionStorage.setItem("user_data", JSON.stringify(userData));
         }
+
+        await sendMessage({
+          user: userData.username,
+          action: action,
+          info: `${userData.email}`,
+        });
+
         router.push("/");
+        setIsLoading(false);
       } catch (error) {
         setErrorMessage("حدث خطأ، حاول مرة أخرى لاحقًا.");
       } finally {

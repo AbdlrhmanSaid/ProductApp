@@ -2,10 +2,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import sendMessage from "@/utils/sendMessage";
 
 const useEditProduct = () => {
   const router = useRouter();
   const { id } = useParams();
+  const { userData } = useSelector((state) => state.user);
 
   const [product, setProduct] = useState({
     title: "",
@@ -79,6 +82,11 @@ const useEditProduct = () => {
           `https://nodeproject-production-dc03.up.railway.app/updateProduct/${id}`,
           { ...product, price: parseFloat(product.price) }
         );
+        await sendMessage({
+          user: userData.username,
+          action: "تحديث منتج",
+          info: `${userData.email} اسم المنتج ${product.title}`,
+        });
 
         router.push("/");
       } catch (error) {

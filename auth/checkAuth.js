@@ -18,7 +18,7 @@ const CheckAuth = ({ children }) => {
     if (storedUser) {
       dispatch(setUser(JSON.parse(storedUser)));
     }
-    setIsChecking(false);
+    setTimeout(() => setIsChecking(false), 1000);
   }, [dispatch]);
 
   useEffect(() => {
@@ -27,12 +27,8 @@ const CheckAuth = ({ children }) => {
     }
   }, [user, router, isChecking]);
 
-  const content = useMemo(() => {
-    if (isChecking) return <Loading />;
-    return user ? children : <ErrorLogin />;
-  }, [isChecking, user, children]);
-
-  return content;
+  if (isChecking) return <Loading title={"التحقق من الصلاحيات"} />;
+  return user ? children : <ErrorLogin />;
 };
 
 export default CheckAuth;

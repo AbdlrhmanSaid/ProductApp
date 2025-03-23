@@ -1,4 +1,4 @@
-export default function Loading() {
+export default function Loading({ title }) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 w-full">
       <div className="flex flex-col items-center space-y-4">
@@ -6,7 +6,7 @@ export default function Loading() {
           <span></span>
         </div>
         <p className="text-[#1976D2] text-lg font-semibold animate-pulse">
-          جاري التحميل...
+          {title}
         </p>
       </div>
     </div>

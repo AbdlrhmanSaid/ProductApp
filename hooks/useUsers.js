@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import sendMessage from "@/utils/sendMessage";
 
 const useUsers = () => {
   const [users, setUsers] = useState([]);
@@ -11,7 +12,6 @@ const useUsers = () => {
   const [search, setSearch] = useState("");
 
   const user = useSelector((state) => state.user.userData);
-  const position = user?.position;
 
   const baseUrl = "https://nodeproject-production-dc03.up.railway.app";
 
@@ -45,6 +45,11 @@ const useUsers = () => {
       setUsers((prevUsers) =>
         prevUsers.filter((user) => user._id !== userToDelete)
       );
+      await sendMessage({
+        user: user.username,
+        action: "حذف مستخدم",
+        info: `${user.email} `,
+      });
       handleClose();
     } catch (error) {
       console.error("خطأ في حذف المستخدم:", error);

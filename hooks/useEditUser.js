@@ -2,11 +2,14 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import sendMessage from "@/utils/sendMessage";
 
 const useEditUser = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
+  const { userData } = useSelector((state) => state.user);
 
   const baseUrl = useMemo(
     () => "https://nodeproject-production-dc03.up.railway.app",
@@ -75,6 +78,11 @@ const useEditUser = () => {
           `${baseUrl}/updateUser/${userId}`,
           formData
         );
+        await sendMessage({
+          user: userData.username,
+          action: "تحديث مستخدم",
+          info: `${userData.email} اسم المستخدم ${formData.username}`,
+        });
         if (response.status === 200) {
           router.push("/");
         }

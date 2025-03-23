@@ -1,10 +1,12 @@
 "use client";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Loading from "@/components/Loading";
+import { useSelector } from "react-redux";
+import sendMessage from "@/utils/sendMessage";
 
 const useAddProduct = () => {
   const router = useRouter();
+  const { userData } = useSelector((state) => state.user);
   const [product, setProduct] = useState({
     title: "",
     price: "",
@@ -49,7 +51,14 @@ const useAddProduct = () => {
             body: JSON.stringify({ ...product, price: priceValue }),
           }
         );
+
         if (!response.ok) throw new Error("❌ فشل في إرسال البيانات!");
+
+        await sendMessage({
+          user: userData.username,
+          action: "اضافة منتج",
+          info: `${userData.email} `,
+        });
 
         router.push("/");
       } catch (error) {

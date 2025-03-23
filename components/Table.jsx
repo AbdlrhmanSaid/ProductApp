@@ -51,7 +51,7 @@ const Table = ({ users, confirmDelete, position }) => {
           </tbody>
         </table>
       ) : (
-        <Loading />
+        <Loading title={"الجدول"} />
       )}
     </div>
   );

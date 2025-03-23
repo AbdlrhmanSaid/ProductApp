@@ -45,7 +45,7 @@ export default function ProductCard({ product, handleOpen, position }) {
 
         <Link href={`/product/${product._id}`} className="w-[30%]">
           <button
-            className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded w-full text-sm transition"
+            className="bg-[#2563EB] hover:bg-blue-600 text-white px-5 py-3 rounded w-full text-sm transition"
             aria-label={`زيارة صفحة المنتج ${product.title}`}
           >
             زيارة

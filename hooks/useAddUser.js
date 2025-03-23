@@ -2,12 +2,15 @@
 import { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import sendMessage from "@/utils/sendMessage";
 
 const useAddUser = () => {
   const baseUrl = useMemo(
     () => "https://nodeproject-production-dc03.up.railway.app",
     []
   );
+  const { userData } = useSelector((state) => state.user);
 
   const router = useRouter();
 
@@ -56,6 +59,11 @@ const useAddUser = () => {
           email,
           password,
           position,
+        });
+        await sendMessage({
+          user: userData.username,
+          action: "اضافة مستخدم",
+          info: `${userData.email}`,
         });
 
         router.push("/");
