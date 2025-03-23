@@ -1,7 +1,14 @@
 import "./globals.css";
+import { Cairo } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import ProviderStore from "@/store/ProviderStore";
+
+const cairo = Cairo({
+  subsets: ["arabic"],
+  weight: ["400", "700"],
+});
 
 export const metadata = {
   title: "Warehouse management",
@@ -11,10 +18,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ProviderStore>
-      <html lang="ar" suppressHydrationWarning>
-        <body className="bg-100-700 text-gray-900">
+      <html suppressHydrationWarning>
+        <body className={`${cairo.className} bg-gray-200 text-gray-900`}>
           <Navbar />
-          <main className="container mx-auto p-5">{children}</main>
+          <main className="block md:flex justify-center">
+            <Sidebar />
+            <div className="flex-1 p-4 container mb-3">{children}</div>
+          </main>
           <Footer />
         </body>
       </html>

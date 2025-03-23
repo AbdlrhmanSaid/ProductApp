@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { IoPerson, IoLogOutOutline, IoMenu } from "react-icons/io5";
-import { MdInventory, MdPeople } from "react-icons/md";
+import { IoLogOutOutline, IoMenu } from "react-icons/io5";
+import { IoIosPersonAdd } from "react-icons/io";
+import { MdInventory, MdPeople, MdAddShoppingCart } from "react-icons/md";
 import { BiMessageDetail } from "react-icons/bi";
+import { FaUser } from "react-icons/fa";
 import { logoutUser } from "@/store/slices/userSlice";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,7 +30,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <nav className="bg-[#1976D2] p-4">
+    <nav className="bg-gradient-to-r from-blue-600 to-blue-400 p-4 md:hidden">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/">
           <Image src="/favicon.png" width={100} height={50} alt="Logo" />
@@ -36,39 +38,8 @@ function ResponsiveAppBar() {
 
         {user ? (
           <>
-            <div className="hidden md:flex space-x-6">
-              <Link
-                href="/#products"
-                className="text-white flex items-center gap-2"
-              >
-                <MdInventory />
-                المنتجات
-              </Link>
-              <Link
-                href="/#users"
-                className="text-white flex items-center gap-2"
-              >
-                <MdPeople />
-                المستخدمون
-              </Link>
-              <Link
-                href="/#msgs"
-                className="text-white flex items-center gap-2"
-              >
-                <BiMessageDetail />
-                التفاصيل
-              </Link>
-            </div>
-            <div className="hidden md:flex space-x-4">
-              <Link href={`/profile/${user._id}`} className="text-white">
-                <IoPerson className="w-7 h-7" />
-              </Link>
-              <button onClick={signOut} className="text-white">
-                <IoLogOutOutline className="w-7 h-7" />
-              </button>
-            </div>
             <button
-              className="md:hidden text-white"
+              className=" text-white"
               onClick={() => setMenuOpen(!isMenuOpen)}
             >
               <IoMenu className="w-7 h-7" />
@@ -87,35 +58,65 @@ function ResponsiveAppBar() {
       {isMenuOpen && user && (
         <div className="md:hidden  p-4 mt-2 space-y-3 text-center">
           <Link
-            href="/#products"
+            href="/"
             className="text-white flex items-center gap-2"
             onClick={() => setMenuOpen(false)}
           >
             <MdInventory />
             المنتجات
           </Link>
+          {user?.position !== "normal" && (
+            <>
+              <Link
+                href="/users"
+                className="text-white flex items-center gap-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                <MdPeople />
+                المستخدمون
+              </Link>
+              <Link
+                href="/add-user"
+                className="text-white flex items-center gap-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                <IoIosPersonAdd />
+                اضافة مستخدم
+              </Link>
+              <Link
+                href="/add-product"
+                className="text-white flex items-center gap-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                <MdAddShoppingCart />
+                اضافة منتج
+              </Link>
+            </>
+          )}
+          {user?.position === "owner" && (
+            <Link
+              href="/messages"
+              className="text-white flex items-center gap-2"
+              onClick={() => setMenuOpen(false)}
+            >
+              <BiMessageDetail />
+              الاشاعارات
+            </Link>
+          )}
           <Link
-            href="/#users"
+            href={`/profile/${user._id}`}
             className="text-white flex items-center gap-2"
             onClick={() => setMenuOpen(false)}
           >
-            <MdPeople />
-            المستخدمون
-          </Link>
-          <Link
-            href="/#msgs"
-            className="text-white flex items-center gap-2"
-            onClick={() => setMenuOpen(false)}
-          >
-            <BiMessageDetail />
-            التفاصيل
+            <FaUser />
+            الصفحه الشخصيه
           </Link>
           <button
             onClick={() => {
               signOut();
               setMenuOpen(false);
             }}
-            className="block text-white w-full text-center"
+            className="text-white flex items-center gap-2"
           >
             <IoLogOutOutline className="m-auto h-7 w-7" />
           </button>

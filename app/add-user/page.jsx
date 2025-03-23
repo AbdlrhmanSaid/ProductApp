@@ -80,7 +80,7 @@ const AddUserForm = () => {
 
             <button
               type="submit"
-              className="bg-green-500 text-white px-4 py-2 rounded flex items-center justify-center w-full"
+              className="bg-blue-500 text-white px-4 py-2 rounded flex items-center justify-center w-full"
               disabled={loading}
             >
               {loading ? <Spinner /> : "إضافة المستخدم"}
