@@ -9,8 +9,8 @@ const NavPage = ({ link = "", next = false }) => {
   if (!user) return null;
 
   return (
-    <div className="mb-3 bg-white text-gray-600 flex flex-wrap justify-between items-center px-6 py-3 rounded-lg shadow-md border border-gray-200">
-      <div className="flex items-center gap-2">
+    <div className="mb-3 bg-white text-gray-600 flex flex-wrap justify-between items-center p-4 rounded-lg shadow-md border border-gray-200">
+      <div className="flex items-center gap-2 text-sm sm:text-base">
         <Link
           href="/"
           className="text-gray-700 hover:text-blue-600 font-semibold transition-colors duration-200"
@@ -26,11 +26,9 @@ const NavPage = ({ link = "", next = false }) => {
       </div>
       <Link
         href={`/profile/${user._id}`}
-        className="font-medium text-gray-700 flex items-center gap-2  hover:text-blue-600 duration-100"
+        className="font-medium text-gray-700 flex items-center gap-1 sm:gap-2 text-sm sm:text-base hover:text-blue-600 duration-100"
       >
-        <span>
-          <IoPerson className="" />
-        </span>
+        <IoPerson className="text-lg sm:text-xl" />
         <span>{user.username}</span>
       </Link>
     </div>

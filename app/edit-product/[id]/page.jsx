@@ -80,7 +80,7 @@ export default function EditProduct() {
                 onChange={handleQuantityChange}
                 placeholder="الكمية"
                 className="border p-2 w-full rounded"
-                min="1"
+                min="0"
               />
               <button
                 type="submit"

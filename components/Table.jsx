@@ -1,16 +1,18 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
+import { FaUser } from "react-icons/fa";
+import { MdEdit, MdOutlineDeleteOutline } from "react-icons/md";
 
 const Table = ({ users, confirmDelete, position }) => {
   const router = useRouter();
 
   return (
     <div className="overflow-x-auto">
-      {users ? (
-        <table className="w-full border border-gray-300 shadow-lg rounded-lg overflow-hidden">
-          <thead>
-            <tr className="bg-gray-800 text-white">
+      {users && users.length > 0 ? (
+        <table className="w-full border shadow-lg rounded-lg overflow-hidden">
+          <thead className="bg-gray-200">
+            <tr>
               <th className="border p-3 text-left">Username</th>
               <th className="border p-3 text-left">Email</th>
               <th className="border p-3 text-left">Position</th>
@@ -23,25 +25,30 @@ const Table = ({ users, confirmDelete, position }) => {
                 key={user._id}
                 className="border-b hover:bg-gray-100 transition duration-200"
               >
-                <td className="border p-3">{user.username}</td>
-                <td className="border p-3">{user.email}</td>
-                <td className="border p-3">{user.position || "N/A"}</td>
-                <td className="border p-3 flex items-center justify-center space-x-2">
+                <td className=" p-3 flex items-center gap-2">
+                  <span className="text-blue-600 bg-blue-100 hover:bg-blue-200 p-2 rounded-full transition duration-300">
+                    <FaUser />
+                  </span>
+                  <span>{user.username}</span>
+                </td>
+                <td className=" p-3">{user.email}</td>
+                <td className=" p-3">{user.position || "N/A"}</td>
+                <td className=" p-3 flex items-center justify-center space-x-2">
                   {position === "owner" && (
                     <>
                       <button
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200"
+                        className="bg-[#e5e7eba1] hover:text-blue-600 px-4 py-2 rounded-lg transition duration-200"
                         onClick={() =>
                           router.push(`/edit-user?userId=${user._id}`)
                         }
                       >
-                        Edit
+                        <MdEdit />
                       </button>
                       <button
-                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-200"
+                        className="bg-[#e5e7eba1] hover:text-red-600 px-4 py-2 rounded-lg transition duration-200"
                         onClick={() => confirmDelete(user._id)}
                       >
-                        Delete
+                        <MdOutlineDeleteOutline />
                       </button>
                     </>
                   )}
@@ -50,8 +57,10 @@ const Table = ({ users, confirmDelete, position }) => {
             ))}
           </tbody>
         </table>
+      ) : users && users.length === 0 ? (
+        <p className="text-center p-5 text-gray-500">No users available</p>
       ) : (
-        <Loading title={"الجدول"} />
+        <Loading title={"Loading Table..."} />
       )}
     </div>
   );

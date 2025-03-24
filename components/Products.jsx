@@ -51,7 +51,7 @@ export default function Products() {
       {loading ? (
         <Loading title={"تحميل المنتجات"} />
       ) : (
-        <>
+        <div className="bg-white p-4 rounded-lg shadow-lg">
           <Suspense fallback={<Loading title={"تحميل الفئات"} />}>
             <Categories
               setSearch={setSearch}
@@ -59,7 +59,6 @@ export default function Products() {
               search={search}
             />
           </Suspense>
-
           {filteredProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
@@ -74,7 +73,6 @@ export default function Products() {
           ) : (
             <AlertMsg msg="لم يتم العثور على منتجات." />
           )}
-
           {user.position !== "normal" && (
             <div className="text-blue-600 my-6 font-bold">
               <Link href={"/add-product"} className="flex items-center gap-1">
@@ -85,7 +83,6 @@ export default function Products() {
               </Link>
             </div>
           )}
-
           {open && (
             <Suspense fallback={<Loading title={"تحميل النافذة"} />}>
               <DialogWindow
@@ -96,7 +93,7 @@ export default function Products() {
               />
             </Suspense>
           )}
-        </>
+        </div>
       )}
     </div>
   );
