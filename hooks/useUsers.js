@@ -12,7 +12,6 @@ const useUsers = () => {
   const [search, setSearch] = useState("");
 
   const user = useSelector((state) => state.user.userData);
-
   const baseUrl = "https://nodeproject-production-dc03.up.railway.app";
 
   const fetchUsers = useCallback(async () => {
@@ -21,6 +20,7 @@ const useUsers = () => {
       setUsers(response.data);
     } catch (error) {
       console.error("خطأ في جلب المستخدمين:", error);
+      alert("فشل في جلب المستخدمين. حاول مرة أخرى.");
     }
   }, []);
 
@@ -29,6 +29,7 @@ const useUsers = () => {
   }, [fetchUsers]);
 
   const confirmDelete = useCallback((id) => {
+    if (!id) return;
     setUserToDelete(id);
     setOpen(true);
   }, []);
@@ -45,25 +46,32 @@ const useUsers = () => {
       setUsers((prevUsers) =>
         prevUsers.filter((user) => user._id !== userToDelete)
       );
-      await sendMessage({
-        user: user.username,
-        action: "حذف مستخدم",
-        info: `${user.email} `,
-      });
+
+      try {
+        await sendMessage({
+          user: user.username,
+          action: "حذف مستخدم",
+          info: `${user.email}`,
+        });
+      } catch (logError) {
+        console.error("فشل في تسجيل النشاط:", logError);
+      }
+
       handleClose();
     } catch (error) {
       console.error("خطأ في حذف المستخدم:", error);
+      alert("فشل حذف المستخدم. حاول مرة أخرى.");
     }
   }, [userToDelete, handleClose]);
 
   const filteredUsers = useMemo(() => {
     if (!search) return users;
-    const lowerCaseSearch = search.toLowerCase();
+    const lowerCaseSearch = search.toLowerCase().normalize("NFKD");
     return users.filter(
       (user) =>
-        user.username.toLowerCase().includes(lowerCaseSearch) ||
-        user.email.toLowerCase().includes(lowerCaseSearch) ||
-        user.position.toLowerCase().includes(lowerCaseSearch)
+        user.username.toLowerCase().normalize("NFKD").includes(lowerCaseSearch) ||
+        user.email.toLowerCase().normalize("NFKD").includes(lowerCaseSearch) ||
+        user.position.toLowerCase().normalize("NFKD").includes(lowerCaseSearch)
     );
   }, [search, users]);
 
