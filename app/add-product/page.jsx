@@ -3,7 +3,7 @@ import useAddProduct from "@/hooks/useAddProduct";
 import Loading from "@/components/Loading";
 import CheckAuth from "@/auth/checkAuth";
 import { FiPlusCircle } from "react-icons/fi";
-import NotAdmin from "@/auth/notAdmin";
+import NotAdmin from "@/auth/NotAdmin";
 import NavPage from "@/components/NavPage";
 
 export default function AddProduct() {

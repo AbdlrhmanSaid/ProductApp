@@ -2,7 +2,7 @@
 
 import CheckAuth from "@/auth/checkAuth";
 import UsersTable from "@/components/UsersTable";
-import NotAdmin from "@/auth/notAdmin";
+import NotAdmin from "@/auth/NotAdmin";
 import NavPage from "@/components/NavPage";
 
 const UsersPage = () => {

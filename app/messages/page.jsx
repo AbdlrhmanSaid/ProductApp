@@ -2,7 +2,7 @@
 import React from "react";
 import CheckAuth from "@/auth/checkAuth";
 import Messages from "@/components/Messages";
-import NotAdmin from "@/auth/notAdmin";
+import NotAdmin from "@/auth/NotAdmin";
 import NavPage from "@/components/NavPage";
 
 const MessagesPage = () => {

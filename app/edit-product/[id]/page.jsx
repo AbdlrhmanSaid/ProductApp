@@ -5,7 +5,7 @@ import { MdEdit } from "react-icons/md";
 import Loading from "@/components/Loading";
 import useEditProduct from "@/hooks/useEditProduct";
 import CheckAuth from "@/auth/checkAuth";
-import NotAdmin from "@/auth/notAdmin";
+import NotAdmin from "@/auth/NotAdmin";
 import NavPage from "@/components/NavPage";
 
 export default function EditProduct() {
