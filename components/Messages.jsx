@@ -7,8 +7,8 @@ import AlertMsg from "./AlertMsg";
 const Messages = () => {
   const { message = [], loading, deleteAllMessages } = useMessage();
 
-  const userMsg = message.filter((msg) => msg.user !== "stand");
-  const standMsg = message.filter((msg) => msg.user === "stand");
+  const userMsg = message.reverse().filter((msg) => msg.user !== "stand");
+  const standMsg = message.reverse().filter((msg) => msg.user === "stand");
 
   return (
     <div
