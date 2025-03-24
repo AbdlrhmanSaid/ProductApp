@@ -4,7 +4,7 @@ import useProduct from "@/hooks/useProduct";
 import Loading from "@/components/Loading";
 import { QRCodeCanvas } from "qrcode.react";
 import CheckAuth from "@/auth/checkAuth";
-import Image from "next/image";
+import NavPage from "@/components/NavPage";
 
 const Page = ({ params }) => {
   const safeParams = use(params) || {};
@@ -56,6 +56,8 @@ const Page = ({ params }) => {
 
   return (
     <CheckAuth>
+      <NavPage link={"تفاصيل منتج"} next={true} />
+
       <div className="h-screen container mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg flex flex-col md:flex-row gap-6 ">
         <div className="md:w-1/2 w-full flex justify-center">
           <img

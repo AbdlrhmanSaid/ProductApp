@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { setUser } from "@/store/slices/userSlice";
 import { lazy, Suspense } from "react";
 import { IoPerson } from "react-icons/io5";
+import NavPage from "@/components/NavPage";
 
 const ErrorLogin = lazy(() => import("@/components/ErrorLogin"));
 const Loading = lazy(() => import("@/components/Loading"));
@@ -43,6 +44,7 @@ const ProfilePage = () => {
   return (
     <Suspense fallback={<Loading />}>
       <CheckAuth>
+        <NavPage link={"الصفحه الشخصيه"} next={true} />
         <div className="flex items-center justify-center min-h-screen bg-gray-50 p-5">
           <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-md">
             <h1 className="text-3xl font-bold text-center text-[#1976D2] mb-6">

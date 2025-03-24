@@ -21,7 +21,7 @@ const Messages = () => {
       {loading ? (
         <Loading title={"الرسائل"} />
       ) : (
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col  gap-6">
           <div className="flex-1 p-4 bg-gray-100 rounded-lg shadow-md">
             <h2 className="text-xl font-bold text-[#1565C0] border-b-2 pb-2 mb-3">
               رسائل من المخزن

@@ -5,6 +5,8 @@ import useProducts from "../hooks/useProducts";
 import AlertMsg from "./AlertMsg";
 import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+import NavPage from "./NavPage";
 
 const Card = lazy(() => import("./Card"));
 const Categories = lazy(() => import("./Categories"));
@@ -25,12 +27,15 @@ export default function Products() {
     position,
   } = useProducts();
 
+  const user = useSelector((state) => state.user.userData);
+
   useEffect(() => {
     fetchProducts();
   }, []);
 
   return (
     <div className="container mx-auto " id="products">
+      <NavPage />
       <h1 className="text-3xl font-bold mb-5 flex items-center gap-1">
         <span className="py-3">قائمة المنتجات</span>
       </h1>
@@ -43,7 +48,6 @@ export default function Products() {
           value={search}
         />
       </div>
-
       {loading ? (
         <Loading title={"تحميل المنتجات"} />
       ) : (
@@ -70,14 +74,17 @@ export default function Products() {
           ) : (
             <AlertMsg msg="لم يتم العثور على منتجات." />
           )}
-          <div className="text-blue-600 my-6 font-bold">
-            <Link href={"/add-product"} className="flex items-center gap-1">
-              اضافة المزيد من المنتاجات{" "}
-              <span>
-                <FaArrowRightLong />
-              </span>
-            </Link>
-          </div>
+
+          {user.position !== "normal" && (
+            <div className="text-blue-600 my-6 font-bold">
+              <Link href={"/add-product"} className="flex items-center gap-1">
+                اضافة المزيد من المنتاجات{" "}
+                <span>
+                  <FaArrowRightLong />
+                </span>
+              </Link>
+            </div>
+          )}
 
           {open && (
             <Suspense fallback={<Loading title={"تحميل النافذة"} />}>

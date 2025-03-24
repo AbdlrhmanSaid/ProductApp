@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import ErrorLogin from "@/components/ErrorLogin";
@@ -13,13 +13,26 @@ const CheckAuth = ({ children }) => {
   const user = useSelector((state) => state.user.userData);
   const [isChecking, setIsChecking] = useState(true);
 
-  useEffect(() => {
-    const storedUser = sessionStorage.getItem("user_data");
-    if (storedUser) {
-      dispatch(setUser(JSON.parse(storedUser)));
+  const fetchUserData = useCallback(() => {
+    try {
+      const storedUser = sessionStorage.getItem("user_data");
+      if (storedUser) {
+        dispatch(setUser(JSON.parse(storedUser)));
+      }
+    } catch (error) {
+      console.error("فشل تحميل بيانات المستخدم:", error);
+    } finally {
+      setIsChecking(false);
     }
-    setTimeout(() => setIsChecking(false), 1000);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!user) {
+      fetchUserData();
+    } else {
+      setIsChecking(false);
+    }
+  }, [user, fetchUserData]);
 
   useEffect(() => {
     if (!isChecking && !user) {
@@ -27,7 +40,8 @@ const CheckAuth = ({ children }) => {
     }
   }, [user, router, isChecking]);
 
-  if (isChecking) return <Loading title={"التحقق من الصلاحيات"} />;
+  if (isChecking) return <Loading title="التحقق من الصلاحيات..." />;
+
   return user ? children : <ErrorLogin />;
 };
 
