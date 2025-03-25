@@ -26,7 +26,7 @@ const NavPage = ({ link = "", next = false }) => {
       </div>
       <Link
         href={`/profile/${user._id}`}
-        className="font-medium text-white bg-blue-600 rounded-lg p-3 flex items-center gap-1 sm:gap-2 text-sm sm:text-base hover:text-blue-600 duration-100"
+        className="font-medium text-white bg-blue-600 rounded-lg p-2 flex items-center gap-1 sm:gap-2 text-sm sm:text-base hover:bg-blue-400 duration-100"
       >
         <IoPerson className="text-lg sm:text-xl" />
         <span>{user.username}</span>
