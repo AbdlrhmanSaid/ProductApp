@@ -30,7 +30,7 @@ const Sidebar = () => {
   return (
     <>
       {user && (
-        <div className="m-[1%] hidden md:flex flex-col items-center bg-white h-screen px-4 py-6 shadow-xl rounded-lg">
+        <div className="m-[0.5%] hidden md:flex flex-col items-center bg-white h-screen px-3 py-4 shadow-xl rounded-lg">
           <div className="mb-8 ">
             <Image
               src={"/smIcon.png"}
