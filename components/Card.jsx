@@ -10,14 +10,24 @@ export default function ProductCard({ product, handleOpen, position }) {
 
   return (
     <div className="border p-4 rounded-lg shadow-md bg-white transition-transform transform hover:scale-105 hover:shadow-lg">
-      <Image
-        width={300}
-        height={300}
-        src={product.image}
-        alt={product.title}
-        priority={true}
-        className="w-full h-40 object-cover rounded cursor-pointer"
-      />
+      {/* Image or Product Name Placeholder */}
+      <div className="w-full h-40 rounded bg-blue-600 flex items-center justify-center overflow-hidden">
+        {product.image ? (
+          <Image
+            width={300}
+            height={300}
+            src={product.image}
+            alt={product.title}
+            priority={true}
+            className="w-full h-full object-cover cursor-pointer"
+          />
+        ) : (
+          <span className="text-white text-2xl font-bold text-center p-2">
+            {product.title}
+          </span>
+        )}
+      </div>
+
       <div className="flex justify-between mt-3 gap-2">
         <div className="info">
           <h2 className="text-xl font-bold mt-2 text-gray-800">
