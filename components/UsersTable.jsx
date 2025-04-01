@@ -25,7 +25,7 @@ const UsersTable = () => {
 
   return (
     <div
-      className="container mx-auto mt-5 bg-white p-3 rounded shadow"
+      className="h-screen overflow-hidden container mx-auto mt-5 bg-white p-3 rounded shadow"
       id="users"
     >
       <h1 className="text-3xl font-bold mb-4">قائمة المستخدمين</h1>
