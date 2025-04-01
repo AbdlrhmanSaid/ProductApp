@@ -63,7 +63,7 @@ export default function AddProduct() {
                 value={product?.image}
                 onChange={handleChange}
                 className="border p-3 w-full rounded-lg focus:outline-[#1976D2] shadow-sm"
-                required
+                
               />
 
               <button
