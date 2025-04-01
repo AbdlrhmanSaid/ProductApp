@@ -11,7 +11,7 @@ const useAddProduct = () => {
     title: "",
     price: "",
     category: "",
-    image: "", // هذا الحقل أصبح اختياريًا
+    image: "",
   });
 
   const [error, setError] = useState(null);
@@ -30,13 +30,12 @@ const useAddProduct = () => {
       e.preventDefault();
       setError(null);
 
-      // التحقق من الحقول المطلوبة باستثناء الصورة
-      if (!product.title || !product.price || !product.category) {
+      if (!product.title.trim() || !product.price || !product.category.trim()) {
         setError("❌ الحقول التالية مطلوبة: العنوان، السعر، الفئة!");
         return;
       }
 
-      const priceValue = Number(product.price);
+      const priceValue = parseFloat(product.price);
       if (isNaN(priceValue) || priceValue <= 0) {
         setError("❌ السعر يجب أن يكون رقمًا موجبًا!");
         return;
@@ -44,12 +43,11 @@ const useAddProduct = () => {
 
       try {
         setLoading(true);
-        // إنشاء كائن المنتج بدون الصورة إذا كانت فارغة
-        const productToSend = {
-          title: product.title,
+        const productData = {
+          title: product.title.trim(),
           price: priceValue,
-          category: product.category,
-          ...(product.image && { image: product.image }), // إضافة الصورة فقط إذا كانت موجودة
+          category: product.category.trim(),
+          ...(product.image.trim() && { image: product.image.trim() }),
         };
 
         const response = await fetch(
@@ -57,16 +55,19 @@ const useAddProduct = () => {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(productToSend),
+            body: JSON.stringify(productData),
           }
         );
 
-        if (!response.ok) throw new Error("❌ فشل في إرسال البيانات!");
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "❌ فشل في إرسال البيانات!");
+        }
 
         await sendMessage({
           user: userData.username,
           action: "اضافة منتج",
-          info: `${userData.email}`,
+          info: `${userData.email} أضاف منتج: ${product.title}`,
         });
 
         router.push("/");
