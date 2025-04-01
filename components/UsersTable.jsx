@@ -25,28 +25,35 @@ const UsersTable = () => {
 
   return (
     <div
-      className="h-screen overflow-hidden container mx-auto mt-5 bg-white p-3 rounded shadow"
+      className="h-screen overflow-hidden container mx-auto px-2 sm:px-4 py-5 bg-white rounded shadow"
       id="users"
     >
-      <h1 className="text-3xl font-bold mb-4">قائمة المستخدمين</h1>
-      <input
-        type="search"
-        placeholder="بحث"
-        className="p-3 w-[100%] md:w-[70%] rounded my-3 bg-[#E5E7EB]"
-        onChange={(e) => setSearch(e.target.value)}
-        value={search}
-      />
-      <div className="overflow-x-auto">
-        {filteredUsers.length > 0 ? (
-          <Table
-            position={position}
-            users={filteredUsers}
-            confirmDelete={confirmDelete}
+      <div className="flex flex-col space-y-4">
+        <h1 className="text-2xl sm:text-3xl font-bold">قائمة المستخدمين</h1>
+        
+        <div className="w-full">
+          <input
+            type="search"
+            placeholder="بحث"
+            className="p-3 w-full rounded bg-[#E5E7EB] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
           />
-        ) : (
-          <AlertMsg msg={"لا يوجد مستخدمين"} />
-        )}
+        </div>
+        
+        <div className="overflow-x-auto">
+          {filteredUsers.length > 0 ? (
+            <Table
+              position={position}
+              users={filteredUsers}
+              confirmDelete={confirmDelete}
+            />
+          ) : (
+            <AlertMsg msg={"لا يوجد مستخدمين"} />
+          )}
+        </div>
       </div>
+      
       <DialogWindow
         deleteFunc={deleteUser}
         open={open}
