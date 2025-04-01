@@ -11,7 +11,7 @@ const useAddProduct = () => {
     title: "",
     price: "",
     category: "",
-    image: "",
+    image: "", // هذا الحقل أصبح اختياريًا
   });
 
   const [error, setError] = useState(null);
@@ -30,8 +30,9 @@ const useAddProduct = () => {
       e.preventDefault();
       setError(null);
 
-      if (Object.values(product).some((val) => !val)) {
-        setError("❌ جميع الحقول مطلوبة!");
+      // التحقق من الحقول المطلوبة باستثناء الصورة
+      if (!product.title || !product.price || !product.category) {
+        setError("❌ الحقول التالية مطلوبة: العنوان، السعر، الفئة!");
         return;
       }
 
@@ -43,12 +44,20 @@ const useAddProduct = () => {
 
       try {
         setLoading(true);
+        // إنشاء كائن المنتج بدون الصورة إذا كانت فارغة
+        const productToSend = {
+          title: product.title,
+          price: priceValue,
+          category: product.category,
+          ...(product.image && { image: product.image }), // إضافة الصورة فقط إذا كانت موجودة
+        };
+
         const response = await fetch(
           "https://nodeproject-production-dc03.up.railway.app/postProduct",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...product, price: priceValue }),
+            body: JSON.stringify(productToSend),
           }
         );
 
@@ -57,7 +66,7 @@ const useAddProduct = () => {
         await sendMessage({
           user: userData.username,
           action: "اضافة منتج",
-          info: `${userData.email} `,
+          info: `${userData.email}`,
         });
 
         router.push("/");
@@ -67,7 +76,7 @@ const useAddProduct = () => {
         setLoading(false);
       }
     },
-    [product, router]
+    [product, router, userData]
   );
 
   return { error, addProduct, product, handleChange, loading };
