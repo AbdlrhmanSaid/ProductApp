@@ -10,53 +10,71 @@ const Table = ({ users, confirmDelete, position }) => {
   return (
     <div className="overflow-x-auto">
       {users && users.length > 0 ? (
-        <table className="w-full border shadow-lg rounded-lg overflow-hidden">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="border p-3 text-left">Username</th>
-              <th className="border p-3 text-left">Email</th>
-              <th className="border p-3 text-left">Position</th>
-              <th className="border p-3 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
+        <div className="min-w-full overflow-hidden">
+          <div className="bg-gray-200 rounded-t-lg grid grid-cols-12 p-3 hidden md:grid">
+            <div className="col-span-3 font-semibold text-left">Username</div>
+            <div className="col-span-4 font-semibold text-left">Email</div>
+            <div className="col-span-3 font-semibold text-left">Position</div>
+            <div className="col-span-2 font-semibold text-center">Actions</div>
+          </div>
+          
+          <div className="divide-y">
             {users.map((user) => (
-              <tr
+              <div 
                 key={user._id}
-                className="border-b hover:bg-gray-100 transition duration-200"
+                className="grid grid-cols-1 md:grid-cols-12 gap-2 p-3 hover:bg-gray-100 transition duration-200"
               >
-                <td className=" p-3 flex items-center gap-2">
-                  <span className="text-blue-600 bg-blue-100 hover:bg-blue-200 p-2 rounded-full transition duration-300">
+                {/* Mobile View */}
+                <div className="md:hidden flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <span className="text-blue-600 bg-blue-100 p-2 rounded-full">
+                      <FaUser />
+                    </span>
+                    <span className="font-semibold">{user.username}</span>
+                  </div>
+                  <div className="text-sm text-gray-500">{user.position || "N/A"}</div>
+                </div>
+                
+                <div className="md:hidden text-sm text-gray-700 mb-2">{user.email}</div>
+                
+                {/* Desktop View */}
+                <div className="hidden md:flex items-center col-span-3">
+                  <span className="text-blue-600 bg-blue-100 p-2 rounded-full mr-2">
                     <FaUser />
                   </span>
                   <span>{user.username}</span>
-                </td>
-                <td className=" p-3">{user.email}</td>
-                <td className=" p-3">{user.position || "N/A"}</td>
-                <td className=" p-3 flex items-center justify-center space-x-2">
+                </div>
+                
+                <div className="hidden md:flex items-center col-span-4">
+                  {user.email}
+                </div>
+                
+                <div className="hidden md:flex items-center col-span-3">
+                  {user.position || "N/A"}
+                </div>
+                
+                <div className="flex md:justify-center items-center col-span-12 md:col-span-2 space-x-2 mt-2 md:mt-0">
                   {position === "owner" && (
                     <>
                       <button
-                        className="bg-[#e5e7eba1] hover:text-blue-600 px-4 py-2 rounded-lg transition duration-200"
-                        onClick={() =>
-                          router.push(`/edit-user?userId=${user._id}`)
-                        }
+                        className="bg-[#e5e7eba1] hover:text-blue-600 p-2 rounded-lg transition duration-200"
+                        onClick={() => router.push(`/edit-user?userId=${user._id}`)}
                       >
                         <MdEdit />
                       </button>
                       <button
-                        className="bg-[#e5e7eba1] hover:text-red-600 px-4 py-2 rounded-lg transition duration-200"
+                        className="bg-[#e5e7eba1] hover:text-red-600 p-2 rounded-lg transition duration-200"
                         onClick={() => confirmDelete(user._id)}
                       >
                         <MdOutlineDeleteOutline />
                       </button>
                     </>
                   )}
-                </td>
-              </tr>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
       ) : users && users.length === 0 ? (
         <p className="text-center p-5 text-gray-500">No users available</p>
       ) : (
