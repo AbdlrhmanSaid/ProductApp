@@ -58,13 +58,24 @@ const Page = ({ params }) => {
     <CheckAuth>
       <NavPage link={"تفاصيل منتج"} next={true} />
 
-      <div className="h-screen container mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg flex flex-col md:flex-row gap-6 ">
-        <div className="md:w-1/2 w-full flex justify-center">
-          <img
-            src={product.image || "/placeholder.png"}
-            alt={product.title}
-            className="rounded-lg w-full h-auto object-cover max-h-[500px]"
-          />
+      <div className="h-screen container mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg flex flex-col md:flex-row gap-6">
+        <div className="md:w-1/2 w-full flex justify-center items-center">
+          {product.image ? (
+            <img
+              src={product.image}
+              alt={product.title}
+              className="rounded-lg w-full h-auto object-cover max-h-[500px]"
+            />
+          ) : (
+            <div 
+              className="w-full h-[500px] bg-blue-600 rounded-lg flex items-center justify-center"
+              style={{ minHeight: '500px' }}
+            >
+              <h2 className="text-white text-4xl font-bold text-center p-4">
+                {product.title}
+              </h2>
+            </div>
+          )}
         </div>
 
         <div className="md:w-1/2 w-full flex flex-col justify-between">
