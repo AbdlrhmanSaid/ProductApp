@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { IoLogOutOutline, IoMenu } from "react-icons/io5";
 import { IoIosPersonAdd } from "react-icons/io";
@@ -15,6 +16,7 @@ import Link from "next/link";
 function ResponsiveAppBar() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const pathname = usePathname();
   const reduxUser = useSelector((state) => state.user.userData);
   const [user, setUser] = useState(null);
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -28,6 +30,11 @@ function ResponsiveAppBar() {
     dispatch(logoutUser());
     router.push("/login");
   };
+
+  // إخفاء النافبار إذا كان المسار هو /login
+  if (pathname === "/login") {
+    return null;
+  }
 
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-blue-400 p-4 md:hidden">
