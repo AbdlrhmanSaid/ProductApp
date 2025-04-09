@@ -7,12 +7,12 @@ const NotAdmin = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (user.position === "normal") {
+    if (user?.position === "normal") {
       router.push("/");
     }
   }, [user, router]);
 
-  if (user.position === "normal") {
+  if (user?.position === "normal") {
     return null;
   }
 

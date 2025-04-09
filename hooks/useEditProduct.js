@@ -67,7 +67,7 @@ const useEditProduct = () => {
     const { value } = e.target;
     setProduct((prev) => ({
       ...prev,
-      quantity: Math.max(1, parseInt(value, 10) || 1),
+      quantity: Math.max(0, parseInt(value, 10) || 0),
     }));
   }, []);
 
@@ -98,7 +98,7 @@ const useEditProduct = () => {
         setLoading(false);
       }
     },
-    [product, id, router]
+    [product, id, router, userData]
   );
 
   return {
