@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, Suspense, lazy, useState, useCallback } from "react";
+import { useEffect, Suspense, lazy, useState } from "react";
 import Loading from "./Loading";
-import useProducts from "../hooks/useProducts";
+import useProducts from "@/hooks/useProducts"; // تأكد من هذا السطر
 import AlertMsg from "./AlertMsg";
 import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -18,28 +18,25 @@ export default function Products() {
     search,
     setSearch,
     open,
-    fetchProducts,
+    fetchProducts, // تأكد من أن fetchProducts موجود في useProducts
     handleOpen,
     handleClose,
     deleteProduct,
     uniqueCategories,
     filteredProducts,
     position,
-  } = useProducts();
+  } = useProducts(); // تأكد من أنك تستخدم useProducts
 
   const user = useSelector((state) => state.user.userData);
   const [itsOver, setItsOver] = useState(false);
 
-  const memoizedFetchProducts = useCallback(async () => {
-    await fetchProducts();
-  }, [fetchProducts]);
+  // جلب المنتجات مباشرة عند التحميل
+  useEffect(() => {
+    fetchProducts(); // استدعاء الدالة مباشرة هنا
+  }, [fetchProducts]); // تأكد من أن fetchProducts موجود هنا
 
   useEffect(() => {
-    memoizedFetchProducts();
-  }, [memoizedFetchProducts]);
-
-  useEffect(() => {
-    const hasOutOfStock = filteredProducts.some(
+    const hasOutOfStock = filteredProducts?.some(
       (product) => product.quantity === 0
     );
     setItsOver(hasOutOfStock);
@@ -58,7 +55,7 @@ export default function Products() {
           placeholder="بحث عن منتج..."
           className="w-full md:w-3/4 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(e) => setSearch(e.target.value)}
-          value={search}
+          value={search ?? ""}
         />
       </div>
 
@@ -83,7 +80,7 @@ export default function Products() {
             </div>
           )}
 
-          {filteredProducts.length > 0 ? (
+          {filteredProducts?.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
                 <Card

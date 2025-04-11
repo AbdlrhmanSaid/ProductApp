@@ -7,7 +7,7 @@ import sendMessage from "@/utils/sendMessage";
 
 const useAddUser = () => {
   const baseUrl = useMemo(
-    () => "https://nodeproject-production-dc03.up.railway.app",
+    () => "https://nodeproject-production-dc03.up.railway.app/api/users",
     []
   );
   const { userData } = useSelector((state) => state.user);
@@ -54,7 +54,7 @@ const useAddUser = () => {
 
         const { username, email, password, position } = formData;
 
-        await axios.post(`${baseUrl}/postUser`, {
+        await axios.post(`${baseUrl}`, {
           username,
           email,
           password,

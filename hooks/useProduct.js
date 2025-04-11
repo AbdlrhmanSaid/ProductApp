@@ -18,7 +18,7 @@ const useProduct = () => {
 
     try {
       const res = await fetch(
-        `https://nodeproject-production-dc03.up.railway.app/getProducts/${id}`,
+        `https://nodeproject-production-dc03.up.railway.app/api/products/${id}`,
         { signal }
       );
 

@@ -95,7 +95,7 @@ const useLogin = () => {
       try {
         const action = "تسجيل دخول";
         const response = await axios.post(
-          "https://nodeproject-production-dc03.up.railway.app/getUserByEmail",
+          "https://nodeproject-production-dc03.up.railway.app/api/users/getByEmail",
           { email: formData.email }
         );
         const userData = response.data;

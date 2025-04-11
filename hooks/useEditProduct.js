@@ -25,7 +25,7 @@ const useEditProduct = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        `https://nodeproject-production-dc03.up.railway.app/getProducts/${id}`
+        `https://nodeproject-production-dc03.up.railway.app/api/products/${id}`
       );
       setProduct({
         title: data.title || "",
@@ -79,7 +79,7 @@ const useEditProduct = () => {
       try {
         setLoading(true);
         await axios.patch(
-          `https://nodeproject-production-dc03.up.railway.app/updateProduct/${id}`,
+          `https://nodeproject-production-dc03.up.railway.app/api/products/${id}`,
           { ...product, price: parseFloat(product.price) }
         );
         await sendMessage({

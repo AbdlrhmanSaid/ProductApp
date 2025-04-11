@@ -1,10 +1,11 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://nodeproject-production-dc03.up.railway.app";
+const API_BASE_URL =
+  "https://nodeproject-production-dc03.up.railway.app/api/messages";
 
 const sendMessage = async ({ user, action, info }) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/messages`, {
+    const response = await axios.post(`${API_BASE_URL}`, {
       user,
       action,
       info,

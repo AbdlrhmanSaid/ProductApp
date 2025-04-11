@@ -5,7 +5,8 @@ import ErrorPage from "@/components/ErrorPage";
 import { useSelector } from "react-redux";
 import sendMessage from "@/utils/sendMessage";
 
-const API_BASE_URL = "https://nodeproject-production-dc03.up.railway.app";
+const API_BASE_URL =
+  "https://nodeproject-production-dc03.up.railway.app/api/products";
 
 const useProducts = () => {
   const [products, setProducts] = useState([]);
@@ -18,21 +19,24 @@ const useProducts = () => {
   const user = useSelector((state) => state.user.userData);
   const position = user?.position;
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const { data } = await axios.get(`${API_BASE_URL}/getProducts`);
-        setProducts(data);
-      } catch (err) {
-        console.error("❌ خطأ في جلب المنتجات:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+  // دالة جلب المنتجات
+  const fetchProducts = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(`${API_BASE_URL}`);
+      setProducts(data);
+    } catch (err) {
+      console.error("❌ خطأ في جلب المنتجات:", err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // استخدام useEffect لجلب المنتجات عند تحميل الصفحة
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleOpen = useCallback((product) => {
     setSelectedProduct(product);
@@ -47,9 +51,7 @@ const useProducts = () => {
   const deleteProduct = useCallback(async () => {
     if (!selectedProduct) return;
     try {
-      await axios.delete(
-        `${API_BASE_URL}/deleteProduct/${selectedProduct._id}`
-      );
+      await axios.delete(`${API_BASE_URL}/${selectedProduct._id}`);
 
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product._id !== selectedProduct._id)
@@ -63,7 +65,7 @@ const useProducts = () => {
     } catch (err) {
       console.error("❌ خطأ في حذف المنتج:", err);
     }
-  }, [selectedProduct, handleClose]);
+  }, [selectedProduct, handleClose, user]);
 
   const uniqueCategories = useMemo(() => {
     return [
@@ -93,7 +95,7 @@ const useProducts = () => {
     open,
     selectedProduct,
     error,
-    fetchProducts: () => {},
+    fetchProducts,
     handleOpen,
     handleClose,
     deleteProduct,

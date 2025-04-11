@@ -12,11 +12,12 @@ const useUsers = () => {
   const [search, setSearch] = useState("");
 
   const user = useSelector((state) => state.user.userData);
-  const baseUrl = "https://nodeproject-production-dc03.up.railway.app";
+  const baseUrl =
+    "https://nodeproject-production-dc03.up.railway.app/api/users";
 
   const fetchUsers = useCallback(async () => {
     try {
-      const response = await axios.get(`${baseUrl}/getUsers`);
+      const response = await axios.get(`${baseUrl}`);
       setUsers(response.data);
     } catch (error) {
       console.error("خطأ في جلب المستخدمين:", error);
@@ -42,7 +43,7 @@ const useUsers = () => {
   const deleteUser = useCallback(async () => {
     if (!userToDelete) return;
     try {
-      await axios.delete(`${baseUrl}/deleteUser/${userToDelete}`);
+      await axios.delete(`${baseUrl}/${userToDelete}`);
       setUsers((prevUsers) =>
         prevUsers.filter((user) => user._id !== userToDelete)
       );
@@ -69,7 +70,10 @@ const useUsers = () => {
     const lowerCaseSearch = search.toLowerCase().normalize("NFKD");
     return users.filter(
       (user) =>
-        user.username.toLowerCase().normalize("NFKD").includes(lowerCaseSearch) ||
+        user.username
+          .toLowerCase()
+          .normalize("NFKD")
+          .includes(lowerCaseSearch) ||
         user.email.toLowerCase().normalize("NFKD").includes(lowerCaseSearch) ||
         user.position.toLowerCase().normalize("NFKD").includes(lowerCaseSearch)
     );

@@ -12,7 +12,7 @@ const useEditUser = () => {
   const { userData } = useSelector((state) => state.user);
 
   const baseUrl = useMemo(
-    () => "https://nodeproject-production-dc03.up.railway.app",
+    () => "https://nodeproject-production-dc03.up.railway.app/api/users/:id",
     []
   );
 
@@ -35,7 +35,7 @@ const useEditUser = () => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${baseUrl}/getUsers/${userId}`);
+        const response = await axios.get(`${baseUrl}/${userId}`);
         const { username, email, position } = response.data;
 
         const newData = { username, email, position: position || "normal" };
