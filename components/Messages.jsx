@@ -7,8 +7,8 @@ import AlertMsg from "./AlertMsg";
 const Messages = () => {
   const { message = [], loading, deleteAllMessages } = useMessage();
 
-  const userMsg = message.reverse().filter((msg) => msg.user !== "stand");
-  const standMsg = message.reverse().filter((msg) => msg.user === "stand");
+  const userMsg = [...message].filter((msg) => msg.user !== "stand");
+  const standMsg = [...message].filter((msg) => msg.user === "stand");
 
   return (
     <div
@@ -20,7 +20,7 @@ const Messages = () => {
       </h1>
 
       {loading ? (
-        <Loading title={"الرسائل"} />
+        <Loading title={"الاشعارات"} />
       ) : (
         <div className="flex flex-col gap-6">
           <div className="flex justify-between mb-4">
@@ -36,40 +36,34 @@ const Messages = () => {
 
           <div className="flex-1 p-4 bg-gray-100 rounded-lg shadow-md">
             <h2 className="text-xl font-bold text-[#1565C0] border-b-2 pb-2 mb-3">
-              رسائل من المخزن
+              اشعارات من المخزن
             </h2>
-            <div className="space-y-3 h-60 overflow-y-auto p-2">
+            <div className="grid gap-3 h-60 overflow-y-auto p-2">
               {standMsg.length > 0 ? (
                 standMsg.map((msg) => (
-                  <div
-                    key={msg._id}
-                    className="flex justify-between items-center"
-                  >
+                  <div key={msg._id}>
                     <Msg msg={msg} />
                   </div>
                 ))
               ) : (
-                <AlertMsg msg="لا توجد رسائل من المخزن" />
+                <AlertMsg msg="لا توجد اشعارات من المخزن" />
               )}
             </div>
           </div>
 
           <div className="flex-1 p-4 bg-gray-100 rounded-lg shadow-md">
             <h2 className="text-xl font-bold text-[#1565C0] border-b-2 pb-2 mb-3">
-              رسائل من المستخدمين
+              اشعارات من المستخدمين
             </h2>
-            <div className="space-y-3 h-60 overflow-y-auto p-2">
+            <div className="grid gap-3 h-60 overflow-y-auto p-2">
               {userMsg.length > 0 ? (
                 userMsg.map((msg) => (
-                  <div
-                    key={msg._id}
-                    className="flex justify-between items-center"
-                  >
+                  <div key={msg._id}>
                     <Msg msg={msg} />
                   </div>
                 ))
               ) : (
-                <AlertMsg msg="لا توجد رسائل من المستخدمين" />
+                <AlertMsg msg="لا توجد اشعارات من المستخدمين" />
               )}
             </div>
           </div>
