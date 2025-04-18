@@ -12,7 +12,7 @@ const useEditUser = () => {
   const { userData } = useSelector((state) => state.user);
 
   const baseUrl = useMemo(
-    () => "https://nodeproject-production-dc03.up.railway.app/api/users/:id",
+    () => "https://nodeproject-production-dc03.up.railway.app/api/users",
     []
   );
 
