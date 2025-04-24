@@ -18,22 +18,21 @@ export default function Products() {
     search,
     setSearch,
     open,
-    fetchProducts, // تأكد من أن fetchProducts موجود في useProducts
+    fetchProducts,
     handleOpen,
     handleClose,
     deleteProduct,
     uniqueCategories,
     filteredProducts,
     position,
-  } = useProducts(); // تأكد من أنك تستخدم useProducts
+  } = useProducts();
 
   const user = useSelector((state) => state.user.userData);
   const [itsOver, setItsOver] = useState(false);
 
-  // جلب المنتجات مباشرة عند التحميل
   useEffect(() => {
-    fetchProducts(); // استدعاء الدالة مباشرة هنا
-  }, [fetchProducts]); // تأكد من أن fetchProducts موجود هنا
+    fetchProducts();
+  }, [fetchProducts]);
 
   useEffect(() => {
     const hasOutOfStock = filteredProducts?.some(
@@ -48,28 +47,29 @@ export default function Products() {
       <h1 className="text-3xl font-bold mb-5 flex items-center gap-1">
         <span className="py-3">قائمة المنتجات</span>
       </h1>
-
-      <div className="flex justify-center mb-6">
-        <input
-          type="search"
-          placeholder="بحث عن منتج..."
-          className="w-full md:w-3/4 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search ?? ""}
-        />
+      <div className="mb-4 bg-white p-4 rounded-lg shadow-lg">
+        <Suspense fallback={<Loading title={"تحميل الفئات"} />}>
+          <Categories
+            setSearch={setSearch}
+            uniqueCategories={uniqueCategories}
+            search={search}
+          />
+          <div className="flex justify-center mb-6">
+            <input
+              type="search"
+              placeholder="بحث عن منتج..."
+              className="bg-[#E5E7EB] w-full md:w-3/4 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-950"
+              onChange={(e) => setSearch(e.target.value)}
+              value={search ?? ""}
+            />
+          </div>
+        </Suspense>
       </div>
 
       {loading ? (
         <Loading title={"تحميل المنتجات"} />
       ) : (
         <div className="bg-white p-4 rounded-lg shadow-lg">
-          <Suspense fallback={<Loading title={"تحميل الفئات"} />}>
-            <Categories
-              setSearch={setSearch}
-              uniqueCategories={uniqueCategories}
-              search={search}
-            />
-          </Suspense>
           {user.position !== "normal" && (
             <div className="mb-4">
               <Link href={"/overProducts"}>

@@ -19,9 +19,11 @@ export default function RootLayout({ children }) {
   return (
     <ProviderStore>
       <html suppressHydrationWarning>
-        <body className={`${cairo.className} bg-gray-200 text-gray-900`}>
+        <body
+          className={`${cairo.className} bg-gray-200 text-gray-900 flex flex-col min-h-screen`}
+        >
           <Navbar />
-          <main className="flex justify-center md:gap-3 gap-1">
+          <main className="flex justify-center md:pl-[90px] relative flex-1">
             <Sidebar />
             <div className="flex-1 max-w-[1300px] px-3 md:px-6 py-2">
               {children}

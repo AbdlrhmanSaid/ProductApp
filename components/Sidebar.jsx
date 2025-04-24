@@ -30,7 +30,7 @@ const Sidebar = () => {
   return (
     <>
       {user && (
-        <div className="m-[0.5%] hidden md:flex flex-col items-center bg-white h-screen px-3 py-4 shadow-xl rounded-lg">
+        <div className="m-[0.5%] hidden md:flex flex-col items-center bg-white px-3 py-4 shadow-xl rounded-lg fixed z-20 left-0 h-[95vh]">
           <div className="mb-8 ">
             <Image
               src={"/smIcon.png"}
@@ -40,8 +40,7 @@ const Sidebar = () => {
               className="rounded-full shadow-md border"
             />
           </div>
-
-          <nav className="flex-1 ">
+          <div className="flex-1 ">
             <ul className="space-y-4">
               <SidebarItem href="/" icon={<IoMdHome />} />
               {user?.position !== "normal" && (
@@ -58,8 +57,7 @@ const Sidebar = () => {
                 <SidebarItem href="/messages" icon={<TiMessages />} />
               )}
             </ul>
-          </nav>
-
+          </div>
           <div className=" mt-auto">
             <ul className="space-y-4">
               <SidebarItem href={`/profile/${user._id}`} icon={<FaUser />} />
