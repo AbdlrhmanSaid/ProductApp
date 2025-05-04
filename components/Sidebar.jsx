@@ -10,6 +10,7 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { FaUserFriends, FaUser } from "react-icons/fa";
 import { TiMessages } from "react-icons/ti";
 import { logoutUser } from "@/store/slices/userSlice";
+import { MdOutlineInventory2 } from "react-icons/md";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -30,8 +31,8 @@ const Sidebar = () => {
   return (
     <>
       {user && (
-        <div className="m-[0.5%] hidden md:flex flex-col items-center bg-white px-3 py-4 shadow-xl rounded-lg fixed z-20 left-0 h-[95vh]">
-          <div className="mb-8 ">
+        <div className="m-[0.5%] hidden md:flex flex-col items-center bg-white px-3 py-4 shadow-xl rounded-lg fixed z-20 left-0 h-[98vh]">
+          <div className="mb-4">
             <Image
               src={"/smIcon.png"}
               width={70}
@@ -41,7 +42,7 @@ const Sidebar = () => {
             />
           </div>
           <div className="flex-1 ">
-            <ul className="space-y-4">
+            <ul className="space-y-2 ">
               <SidebarItem href="/" icon={<IoMdHome />} />
               {user?.position !== "normal" && (
                 <>
@@ -51,6 +52,7 @@ const Sidebar = () => {
                     href="/add-product"
                     icon={<MdAddShoppingCart />}
                   />
+                  <SidebarItem href="/stands" icon={<MdOutlineInventory2 />} />
                 </>
               )}
               {user?.position === "owner" && (
@@ -59,7 +61,7 @@ const Sidebar = () => {
             </ul>
           </div>
           <div className=" mt-auto">
-            <ul className="space-y-4">
+            <ul className="space-y-2">
               <SidebarItem href={`/profile/${user._id}`} icon={<FaUser />} />
               <li>
                 <button

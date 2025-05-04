@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,6 +8,7 @@ import { IoIosPersonAdd } from "react-icons/io";
 import { MdInventory, MdPeople, MdAddShoppingCart } from "react-icons/md";
 import { BiMessageDetail } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
+import { MdOutlineInventory2 } from "react-icons/md";
 import { logoutUser } from "@/store/slices/userSlice";
 import Image from "next/image";
 import Link from "next/link";
@@ -97,6 +97,14 @@ function ResponsiveAppBar() {
               >
                 <MdAddShoppingCart />
                 اضافة منتج
+              </Link>
+              <Link
+                href="/stands"
+                className="text-white flex items-center gap-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                <MdOutlineInventory2 />
+                المخازن
               </Link>
             </>
           )}
