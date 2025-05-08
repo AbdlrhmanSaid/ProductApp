@@ -25,7 +25,7 @@ const NavPage = ({ link = "", next = false }) => {
         )}
       </div>
       <Link
-        href={`/profile/${user._id}`}
+        href={`/users/profile/${user._id}`}
         className="font-medium text-white bg-blue-600 rounded-md px-2 py-1 flex items-center gap-1 text-sm hover:bg-blue-500 transition-colors"
       >
         <IoPerson className="text-base" />

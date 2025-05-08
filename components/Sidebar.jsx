@@ -47,9 +47,12 @@ const Sidebar = () => {
               {user?.position !== "normal" && (
                 <>
                   <SidebarItem href="/users" icon={<FaUserFriends />} />
-                  <SidebarItem href="/add-user" icon={<IoIosPersonAdd />} />
                   <SidebarItem
-                    href="/add-product"
+                    href="/users/add-user"
+                    icon={<IoIosPersonAdd />}
+                  />
+                  <SidebarItem
+                    href="/products/add-product"
                     icon={<MdAddShoppingCart />}
                   />
                   <SidebarItem href="/stands" icon={<MdOutlineInventory2 />} />
@@ -62,7 +65,10 @@ const Sidebar = () => {
           </div>
           <div className=" mt-auto">
             <ul className="space-y-2">
-              <SidebarItem href={`/profile/${user._id}`} icon={<FaUser />} />
+              <SidebarItem
+                href={`/users/profile/${user._id}`}
+                icon={<FaUser />}
+              />
               <li>
                 <button
                   onClick={signOut}

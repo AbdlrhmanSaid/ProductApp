@@ -13,13 +13,15 @@ const Table = ({ users, confirmDelete, position }) => {
         <div className="min-w-full">
           {/* Header for Desktop */}
           <div className="bg-gray-200 rounded-t-lg hidden md:grid grid-cols-12 p-3">
-            <div className="col-span-4 font-semibold text-right">
+            <div className="col-span-4 font-semibold text-right pr-3">
               اسم المستخدم
             </div>
-            <div className="col-span-4 font-semibold text-right">
+            <div className="col-span-4 font-semibold text-right pr-3">
               البريد الإلكتروني
             </div>
-            <div className="col-span-2 font-semibold text-right">الصلاحية</div>
+            <div className="col-span-2 font-semibold text-right pr-3">
+              الصلاحية
+            </div>
             <div className="col-span-2 font-semibold text-center">
               الإجراءات
             </div>
@@ -30,7 +32,7 @@ const Table = ({ users, confirmDelete, position }) => {
             {users.map((user) => (
               <div
                 key={user._id}
-                className="grid grid-cols-1 md:grid-cols-12 gap-3 p-3 hover:bg-gray-50 transition duration-200"
+                className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-0 p-3 hover:bg-gray-50 transition duration-200"
               >
                 {/* Mobile View */}
                 <div className="md:hidden space-y-2">
@@ -58,7 +60,7 @@ const Table = ({ users, confirmDelete, position }) => {
                         <button
                           className="bg-gray-100 hover:text-blue-600 p-1.5 rounded-lg transition"
                           onClick={() =>
-                            router.push(`/edit-user?userId=${user._id}`)
+                            router.push(`/users/edit-user?userId=${user._id}`)
                           }
                         >
                           <MdEdit size={16} />
@@ -75,32 +77,32 @@ const Table = ({ users, confirmDelete, position }) => {
                 </div>
 
                 {/* Desktop View */}
-                <div className="hidden md:flex items-center col-span-4 text-right">
-                  <span className="text-blue-600 bg-blue-100 p-2 rounded-full ml-2">
-                    <FaUser size={14} />
+                <div className="hidden md:flex items-center col-span-4 gap-3 text-right pr-3">
+                  <span className="text-blue-600 bg-blue-100 p-2 rounded-full">
+                    <FaUser size={16} />
                   </span>
                   <span className="truncate">
                     {user.username || "بدون اسم"}
                   </span>
                 </div>
 
-                <div className="hidden md:flex items-center col-span-4 text-right text-sm text-gray-700 truncate">
+                <div className="hidden md:flex items-center col-span-4 text-right pr-3 text-sm text-gray-700 truncate">
                   {user.email}
                 </div>
 
-                <div className="hidden md:flex items-center col-span-2 text-right text-sm">
+                <div className="hidden md:flex items-center col-span-2 text-right pr-3 text-sm">
                   <span className="bg-gray-100 px-2 py-1 rounded">
                     {user.position || "N/A"}
                   </span>
                 </div>
 
-                <div className="hidden md:flex justify-center items-center col-span-2 space-x-2 rtl:space-x-reverse">
+                <div className="hidden md:flex items-center justify-center col-span-2 space-x-2 rtl:space-x-reverse">
                   {position === "owner" && (
                     <>
                       <button
                         className="bg-gray-100 hover:text-blue-600 p-2 rounded-lg transition"
                         onClick={() =>
-                          router.push(`/edit-user?userId=${user._id}`)
+                          router.push(`/users/edit-user?userId=${user._id}`)
                         }
                       >
                         <MdEdit size={18} />

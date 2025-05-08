@@ -21,7 +21,7 @@ const useUsers = () => {
       setUsers(response.data);
     } catch (error) {
       console.error("خطأ في جلب المستخدمين:", error);
-      alert("فشل في جلب المستخدمين. حاول مرة أخرى.");
+      toast.error("فشل في جلب المستخدمين. حاول مرة أخرى.");
     }
   }, []);
 
@@ -61,7 +61,7 @@ const useUsers = () => {
       handleClose();
     } catch (error) {
       console.error("خطأ في حذف المستخدم:", error);
-      alert("فشل حذف المستخدم. حاول مرة أخرى.");
+      toast.error("فشل حذف المستخدم. حاول مرة أخرى.");
     }
   }, [userToDelete, handleClose]);
 

@@ -10,6 +10,16 @@ export default function ProductCard({ product, handleOpen, position }) {
   const isAdminOrOwner = position === "admin" || position === "owner";
   const isOutOfStock = product.quantity === 0;
 
+  function isValidImage(src) {
+    if (!src) return false;
+    try {
+      new URL(src);
+      return true;
+    } catch {
+      return src.startsWith("/") || src.startsWith("./");
+    }
+  }
+
   return (
     <div
       className={`relative border ${
@@ -28,12 +38,12 @@ export default function ProductCard({ product, handleOpen, position }) {
           isOutOfStock ? "bg-gray-100 mt-4" : "bg-blue-50"
         } flex items-center justify-center overflow-hidden`}
       >
-        {product.image ? (
+        {product?.image && isValidImage(product.image) ? (
           <Image
             width={300}
             height={300}
             src={product.image}
-            alt={product.title}
+            alt={product?.title}
             priority={true}
             className={`w-full h-full object-cover ${
               isOutOfStock ? "opacity-70" : ""
@@ -86,7 +96,7 @@ export default function ProductCard({ product, handleOpen, position }) {
 
         <div className="btns flex flex-col justify-between mt-3 gap-2">
           <Link
-            href={`/product/${product._id}`}
+            href={`/products/product/${product._id}`}
             className={`text-white px-4 py-2 rounded transition flex justify-center items-center bg-blue-600 hover:bg-blue-700`}
             aria-label={`زيارة صفحة المنتج ${product.title}`}
           >
@@ -96,7 +106,7 @@ export default function ProductCard({ product, handleOpen, position }) {
           {isAdminOrOwner && (
             <>
               <Link
-                href={`/edit-product/${product._id}`}
+                href={`/products/edit-product/${product._id}`}
                 className="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded transition flex justify-center items-center"
                 aria-label="تعديل المنتج"
               >

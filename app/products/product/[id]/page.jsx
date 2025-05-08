@@ -28,7 +28,7 @@ const Page = ({ params }) => {
   const handlePrint = () => {
     const canvas = qrRef.current.querySelector("canvas");
     if (!canvas) {
-      alert("QR Code not generated yet.");
+      toast.error("QR Code not generated yet.");
       return;
     }
 
@@ -69,9 +69,7 @@ const Page = ({ params }) => {
                 className="rounded-lg w-full h-auto max-h-[500px] object-contain mx-auto"
               />
             ) : (
-              <div 
-                className="w-full h-[300px] md:h-[400px] lg:h-[500px] bg-blue-600 rounded-lg flex items-center justify-center p-4"
-              >
+              <div className="w-full h-[300px] md:h-[400px] lg:h-[500px] bg-blue-600 rounded-lg flex items-center justify-center p-4">
                 <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold text-center">
                   {product.title}
                 </h2>

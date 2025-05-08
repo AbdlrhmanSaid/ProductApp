@@ -37,7 +37,6 @@ const useEditUser = () => {
         setLoading(true);
         const response = await axios.get(`${baseUrl}/${userId}`);
         const { username, email, position } = response.data;
-
         const newData = { username, email, position: position || "normal" };
 
         setFormData((prevData) =>
@@ -74,10 +73,7 @@ const useEditUser = () => {
 
       try {
         setLoading(true);
-        const response = await axios.patch(
-          `${baseUrl}/updateUser/${userId}`,
-          formData
-        );
+        const response = await axios.patch(`${baseUrl}/${userId}`, formData);
         await sendMessage({
           user: userData.username,
           action: "تحديث مستخدم",

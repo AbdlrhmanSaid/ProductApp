@@ -18,7 +18,7 @@ const EditUserFormContent = () => {
       <NotAdmin>
         <NavPage link={"تعديل مستخدم"} next={true} />
 
-        <div className="h-screen flex justify-between items-center" rounded>
+        <div className="h-screen flex justify-between items-center">
           <div className="container mx-auto mt-5 bg-white p-5 rounded shadow">
             <h1 className="text-3xl font-bold mb-4">تعديل بيانات المستخدم</h1>
             {error && <p className="text-red-500 mb-4">{error}</p>}

@@ -83,7 +83,7 @@ function ResponsiveAppBar() {
                 المستخدمون
               </Link>
               <Link
-                href="/add-user"
+                href="/users/add-user"
                 className="text-white flex items-center gap-2"
                 onClick={() => setMenuOpen(false)}
               >
@@ -91,7 +91,7 @@ function ResponsiveAppBar() {
                 اضافة مستخدم
               </Link>
               <Link
-                href="/add-product"
+                href="/products/add-product"
                 className="text-white flex items-center gap-2"
                 onClick={() => setMenuOpen(false)}
               >
@@ -119,7 +119,7 @@ function ResponsiveAppBar() {
             </Link>
           )}
           <Link
-            href={`/profile/${user._id}`}
+            href={`/users/profile/${user._id}`}
             className="text-white flex items-center gap-2"
             onClick={() => setMenuOpen(false)}
           >

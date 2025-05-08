@@ -72,7 +72,7 @@ export default function Products() {
         <div className="bg-white p-4 rounded-lg shadow-lg">
           {user.position !== "normal" && (
             <div className="mb-4">
-              <Link href={"/overProducts"}>
+              <Link href={"/products/overProducts"}>
                 {itsOver && (
                   <AlertMsg msg="بعض المنتجات نفذت الكمية" type="warning" />
                 )}
@@ -98,7 +98,7 @@ export default function Products() {
           {user.position !== "normal" && (
             <div className="text-blue-600 my-6 font-bold">
               <Link
-                href="/add-product"
+                href="/products/add-product"
                 className="flex items-center gap-1 hover:text-blue-700 transition-colors"
               >
                 اضافة المزيد من المنتجات
