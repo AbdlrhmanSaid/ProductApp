@@ -127,15 +127,6 @@ const Stands = () => {
                       )}
                     </div>
                   </div>
-
-                  <div className="mt-4 pt-2 border-t">
-                    <Link
-                      href={`/stands/${stand._id}/products`}
-                      className="text-sm text-blue-600 underline mt-2 inline-block"
-                    >
-                      إدارة المنتجات
-                    </Link>
-                  </div>
                 </div>
               </div>
             ))}
