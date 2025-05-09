@@ -7,11 +7,14 @@ import AlertMsg from "./AlertMsg";
 const Messages = () => {
   const { message = [], loading, deleteAllMessages } = useMessage();
 
-  const userMsg = [...message].filter((msg) => msg.user !== "stand");
-  const standMsg = [...message].filter((msg) => msg.user === "stand");
+  const userMsg = [...message].reverse().filter((msg) => msg.user !== "stand");
+  const standMsg = [...message].reverse().filter((msg) => msg.user === "stand");
 
   return (
-    <div id="msgs" className="container mx-auto mt-5 bg-white p-4 md:p-6 rounded-lg shadow-lg">
+    <div
+      id="msgs"
+      className="container mx-auto mt-5 bg-white p-4 md:p-6 rounded-lg shadow-lg"
+    >
       <h1 className="text-2xl md:text-3xl font-extrabold mb-6 text-center text-[#1976D2]">
         الاشعارات
       </h1>

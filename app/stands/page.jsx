@@ -1,31 +1,38 @@
 "use client";
 
 import { MdOutlineInventory2 } from "react-icons/md";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import useStands from "@/hooks/useStands";
 import NavPage from "@/components/NavPage";
 import Loading from "@/components/Loading";
 import Link from "next/link";
 import CheckAuth from "@/auth/checkAuth";
+import sendMessage from "@/utils/sendMessage";
 
 const Stands = () => {
   const { stands, loading, error } = useStands();
+  const prevStandsRef = useRef();
 
   useEffect(() => {
-    stands.forEach((stand) => {
-      if (
-        stand.currentProductCount > stand.maxCapacity &&
-        stand.maxCapacity !== undefined
-      ) {
-        sendMessage({
-          user: "stand",
-          action: "capacityExceeded",
-          standId: stand._id,
-          message: `المخزن "${stand.standName}" يحتوي على ${stand.currentProductCount} منتج/منتجات، مما يتجاوز السعة القصوى المحددة (${stand.maxCapacity}).`,
-        });
-      }
-    });
+    if (prevStandsRef.current) {
+      stands.forEach((stand, index) => {
+        if (
+          stand.currentProductCount !==
+            prevStandsRef.current[index]?.currentProductCount &&
+          stand.currentProductCount > stand.maxCapacity &&
+          stand.maxCapacity !== undefined
+        ) {
+          sendMessage({
+            user: "stand",
+            action: "Over load",
+            info: `المخزن : ${stand.standName} ممتلئ عن الحد المسموح به`,
+          });
+        }
+      });
+    }
+
+    prevStandsRef.current = stands;
   }, [stands]);
 
   if (loading) {
