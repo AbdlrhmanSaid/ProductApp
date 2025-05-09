@@ -97,7 +97,7 @@ const Stands = () => {
                       <p className="flex justify-between">
                         <span className="text-gray-600">السعة:</span>
                         <span className="font-medium">
-                          {stand.productIds?.length || 0}/
+                          {stand.currentProductCount || 0}/
                           {stand.maxCapacity || "∞"}
                         </span>
                       </p>

@@ -10,7 +10,6 @@ const MessagesPage = () => {
     <CheckAuth>
       <NotAdmin>
         <NavPage link={"الاشعارات"} next={true} />
-
         <Messages />
       </NotAdmin>
     </CheckAuth>

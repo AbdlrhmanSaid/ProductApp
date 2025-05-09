@@ -2,12 +2,28 @@
 
 import useEditStand from "@/hooks/useEditStand";
 import Loading from "@/components/Loading";
+import { useEffect } from "react";
+import sendMessage from "@/utils/sendMessage";
 
 const EditStand = ({ id }) => {
   const { stand, isSubmitting, error, handleChange, handleSubmit } =
     useEditStand(id);
 
   if (!stand) return <Loading />;
+
+  useEffect(() => {
+    if (
+      stand.currentProductCount > stand.maxCapacity &&
+      stand.maxCapacity !== undefined
+    ) {
+      sendMessage({
+        user: "stand",
+        action: "capacityExceeded",
+        standId: stand._id,
+        message: `المخزن "${stand.standName}" يحتوي على ${stand.currentProductCount} منتج/منتجات، مما يتجاوز السعة القصوى المحددة (${stand.maxCapacity}).`,
+      });
+    }
+  }, [stand.currentProductCount, stand.maxCapacity]);
 
   return (
     <div className="max-w-xl mx-auto mt-8 bg-white p-6 rounded-lg shadow">
@@ -51,28 +67,6 @@ const EditStand = ({ id }) => {
             onChange={handleChange}
             className="w-full border rounded p-2"
           />
-        </div>
-
-        <div className="flex items-center gap-4">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name="isActive"
-              checked={stand.isActive}
-              onChange={handleChange}
-            />
-            نشط
-          </label>
-
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name="isFull"
-              checked={stand.isFull}
-              onChange={handleChange}
-            />
-            ممتلئ
-          </label>
         </div>
 
         <button

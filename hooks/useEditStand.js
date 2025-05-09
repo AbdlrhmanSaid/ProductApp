@@ -46,11 +46,8 @@ const useEditStand = (id) => {
 
     const updatedStand = {
       standName: stand.standName,
-      isActive: stand.isActive,
       maxCapacity: stand.maxCapacity,
       productSpacing: stand.productSpacing,
-      isFull: stand.isFull,
-      productIds: stand.productIds,
     };
 
     try {
