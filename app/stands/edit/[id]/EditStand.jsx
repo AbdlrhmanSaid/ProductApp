@@ -11,20 +11,6 @@ const EditStand = ({ id }) => {
 
   if (!stand) return <Loading />;
 
-  useEffect(() => {
-    if (
-      stand.currentProductCount > stand.maxCapacity &&
-      stand.maxCapacity !== undefined
-    ) {
-      sendMessage({
-        user: "stand",
-        action: "capacityExceeded",
-        standId: stand._id,
-        message: `المخزن "${stand.standName}" يحتوي على ${stand.currentProductCount} منتج/منتجات، مما يتجاوز السعة القصوى المحددة (${stand.maxCapacity}).`,
-      });
-    }
-  }, [stand.currentProductCount, stand.maxCapacity]);
-
   return (
     <div className="max-w-xl mx-auto mt-8 bg-white p-6 rounded-lg shadow">
       <h1 className="text-2xl font-bold mb-4">تعديل بيانات المخزن</h1>

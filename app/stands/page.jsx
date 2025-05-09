@@ -1,6 +1,7 @@
 "use client";
 
 import { MdOutlineInventory2 } from "react-icons/md";
+import { useEffect } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import useStands from "@/hooks/useStands";
 import NavPage from "@/components/NavPage";
@@ -10,6 +11,22 @@ import CheckAuth from "@/auth/checkAuth";
 
 const Stands = () => {
   const { stands, loading, error } = useStands();
+
+  useEffect(() => {
+    stands.forEach((stand) => {
+      if (
+        stand.currentProductCount > stand.maxCapacity &&
+        stand.maxCapacity !== undefined
+      ) {
+        sendMessage({
+          user: "stand",
+          action: "capacityExceeded",
+          standId: stand._id,
+          message: `المخزن "${stand.standName}" يحتوي على ${stand.currentProductCount} منتج/منتجات، مما يتجاوز السعة القصوى المحددة (${stand.maxCapacity}).`,
+        });
+      }
+    });
+  }, [stands]);
 
   if (loading) {
     return <Loading title={"جاري تحميل المخازن"} />;
