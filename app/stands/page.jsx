@@ -127,7 +127,7 @@ const Stands = () => {
                       </p>
 
                       <p className="flex justify-between">
-                        <span className="text-gray-600">الحالة:</span>
+                        <span className="text-gray-600">التخزين:</span>
                         <span
                           className={
                             stand.isFull
