@@ -51,7 +51,7 @@ const useAddProduct = () => {
         };
 
         const response = await fetch(
-          "https://nodeproject-production-dc03.up.railway.app/api/products",
+          "https://nodeproject-production-beec.up.railway.app/api/products",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

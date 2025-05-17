@@ -7,7 +7,7 @@ import sendMessage from "@/utils/sendMessage";
 
 const useAddUser = () => {
   const baseUrl = useMemo(
-    () => "https://nodeproject-production-dc03.up.railway.app/api/users",
+    () => "https://nodeproject-production-beec.up.railway.app/api/users",
     []
   );
   const { userData } = useSelector((state) => state.user);

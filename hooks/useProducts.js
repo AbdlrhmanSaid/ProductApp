@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import sendMessage from "@/utils/sendMessage";
 
 const API_BASE_URL =
-  "https://nodeproject-production-dc03.up.railway.app/api/products";
+  "https://nodeproject-production-beec.up.railway.app/api/products";
 
 const useProducts = () => {
   const [products, setProducts] = useState([]);

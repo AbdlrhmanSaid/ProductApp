@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_BASE_URL =
-  "https://nodeproject-production-dc03.up.railway.app/api/messages";
+  "https://nodeproject-production-beec.up.railway.app/api/messages";
 
 const sendMessage = async ({ user, action, info }) => {
   try {

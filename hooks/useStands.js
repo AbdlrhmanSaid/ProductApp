@@ -10,7 +10,7 @@ const useStands = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          "https://nodeproject-production-dc03.up.railway.app/api/stands"
+          "https://nodeproject-production-beec.up.railway.app/api/stands"
         );
         const data = await res.json();
         setStands(data);

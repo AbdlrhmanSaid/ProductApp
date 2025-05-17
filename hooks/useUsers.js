@@ -13,7 +13,7 @@ const useUsers = () => {
 
   const user = useSelector((state) => state.user.userData);
   const baseUrl =
-    "https://nodeproject-production-dc03.up.railway.app/api/users";
+    "https://nodeproject-production-beec.up.railway.app/api/users";
 
   const fetchUsers = useCallback(async () => {
     try {
