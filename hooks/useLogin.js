@@ -95,7 +95,7 @@ const useLogin = () => {
       try {
         const action = "تسجيل دخول";
         const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/users/getByEmail`,
+          `${process.env.NEXT_PUBLIC_URL_API}/api/users/getByEmail`,
           { email: formData.email }
         );
         const userData = response.data;

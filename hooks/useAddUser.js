@@ -7,7 +7,7 @@ import sendMessage from "@/utils/sendMessage";
 
 const useAddUser = () => {
   const baseUrl = useMemo(
-    () => `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/users`,
+    () => `${process.env.NEXT_PUBLIC_URL_API}/api/users`,
     []
   );
   const { userData } = useSelector((state) => state.user);

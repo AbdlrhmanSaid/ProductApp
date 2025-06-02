@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const API_URL = `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/stands`;
+const API_URL = `${process.env.NEXT_PUBLIC_URL_API}/api/stands`;
 
 const useEditStand = (id) => {
   const router = useRouter();

@@ -51,7 +51,7 @@ const useAddProduct = () => {
         };
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/products`,
+          `${process.env.NEXT_PUBLIC_URL_API}/api/products`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

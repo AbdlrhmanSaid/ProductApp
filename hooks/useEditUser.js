@@ -12,7 +12,7 @@ const useEditUser = () => {
   const { userData } = useSelector((state) => state.user);
 
   const baseUrl = useMemo(
-    () => `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/users`,
+    () => `${process.env.NEXT_PUBLIC_URL_API}/api/users`,
     []
   );
 

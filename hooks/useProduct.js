@@ -18,7 +18,7 @@ const useProduct = () => {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/products/${id}`,
+        `${process.env.NEXT_PUBLIC_URL_API}/api/products/${id}`,
         {
           signal,
         }

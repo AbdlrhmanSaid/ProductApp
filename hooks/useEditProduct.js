@@ -25,7 +25,7 @@ const useEditProduct = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/products/${id}`
+        `${process.env.NEXT_PUBLIC_URL_API}/api/products/${id}`
       );
       setProduct({
         title: data.title || "",
@@ -79,7 +79,7 @@ const useEditProduct = () => {
       try {
         setLoading(true);
         await axios.patch(
-          `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/products/${id}`,
+          `${process.env.NEXT_PUBLIC_URL_API}/api/products/${id}`,
           {
             ...product,
             price: parseFloat(product.price),

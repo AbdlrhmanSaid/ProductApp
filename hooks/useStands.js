@@ -10,7 +10,7 @@ const useStands = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/stands`
+          `${process.env.NEXT_PUBLIC_URL_API}/api/stands`
         );
         const data = await res.json();
         setStands(data);

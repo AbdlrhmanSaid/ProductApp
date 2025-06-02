@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import useProducts from "@/hooks/useProducts";
 
-const API_URL = `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/stands`;
+const API_URL = `${process.env.NEXT_PUBLIC_URL_API}/api/stands`;
 
 const useStandProducts = () => {
   const { id } = useParams();
