@@ -5,8 +5,7 @@ import ErrorPage from "@/components/ErrorPage";
 import { useSelector } from "react-redux";
 import sendMessage from "@/utils/sendMessage";
 
-const API_BASE_URL =
-  "https://nodeproject-production-beec.up.railway.app/api/products";
+const API_BASE_URL = `${process.env.apiUrl}/api/products`;
 
 const useProducts = () => {
   const [products, setProducts] = useState([]);

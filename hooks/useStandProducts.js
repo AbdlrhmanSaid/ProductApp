@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import useProducts from "@/hooks/useProducts";
 
-const API_URL = "https://nodeproject-production-beec.up.railway.app/api/stands";
+const API_URL = `${process.env.apiUrl}/api/stands`;
 
 const useStandProducts = () => {
   const { id } = useParams();

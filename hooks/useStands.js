@@ -9,9 +9,7 @@ const useStands = () => {
     const fetchStands = async () => {
       setLoading(true);
       try {
-        const res = await fetch(
-          "https://nodeproject-production-beec.up.railway.app/api/stands"
-        );
+        const res = await fetch(`${process.env.apiUrl}/api/stands`);
         const data = await res.json();
         setStands(data);
       } catch (error) {

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const API_URL = "https://nodeproject-production-beec.up.railway.app/api/stands";
+const API_URL = `${process.env.apiUrl}/api/stands`;
 
 const useEditStand = (id) => {
   const router = useRouter();

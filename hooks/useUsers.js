@@ -12,8 +12,7 @@ const useUsers = () => {
   const [search, setSearch] = useState("");
 
   const user = useSelector((state) => state.user.userData);
-  const baseUrl =
-    "https://nodeproject-production-beec.up.railway.app/api/users";
+  const baseUrl = `${process.env.apiUrl}/api/users`;
 
   const fetchUsers = useCallback(async () => {
     try {
