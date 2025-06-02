@@ -12,7 +12,7 @@ const useUsers = () => {
   const [search, setSearch] = useState("");
 
   const user = useSelector((state) => state.user.userData);
-  const baseUrl = `${process.env.apiUrl}/api/users`;
+  const baseUrl = `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/users`;
 
   const fetchUsers = useCallback(async () => {
     try {

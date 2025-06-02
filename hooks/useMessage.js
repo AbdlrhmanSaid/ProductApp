@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-const API_BASE_URL = `${process.env.apiUrl}/api/messages`;
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/messages`;
 
 const useMessage = () => {
   const [message, setMessage] = useState([]);

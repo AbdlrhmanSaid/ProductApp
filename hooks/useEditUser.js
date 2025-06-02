@@ -11,7 +11,10 @@ const useEditUser = () => {
   const userId = searchParams.get("userId");
   const { userData } = useSelector((state) => state.user);
 
-  const baseUrl = useMemo(() => `${process.env.apiUrl}/api/users`, []);
+  const baseUrl = useMemo(
+    () => `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/users`,
+    []
+  );
 
   const [formData, setFormData] = useState({
     username: "",

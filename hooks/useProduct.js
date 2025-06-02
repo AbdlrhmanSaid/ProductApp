@@ -17,9 +17,12 @@ const useProduct = () => {
     const signal = controller.signal;
 
     try {
-      const res = await fetch(`${process.env.apiUrl}/api/products/${id}`, {
-        signal,
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/products/${id}`,
+        {
+          signal,
+        }
+      );
 
       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
 

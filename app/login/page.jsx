@@ -15,6 +15,8 @@ const LoginPage = () => {
     handleSubmit,
   } = useLogin();
 
+  console.log(process.env.NEXT_PUBLIC_NEXTAUTH_URL);
+
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="bg-white shadow-lg rounded-lg flex w-full max-w-4xl overflow-hidden">

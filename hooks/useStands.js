@@ -9,7 +9,9 @@ const useStands = () => {
     const fetchStands = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${process.env.apiUrl}/api/stands`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/stands`
+        );
         const data = await res.json();
         setStands(data);
       } catch (error) {

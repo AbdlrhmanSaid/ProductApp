@@ -50,11 +50,14 @@ const useAddProduct = () => {
           ...(product.image.trim() && { image: product.image.trim() }),
         };
 
-        const response = await fetch(`${process.env.apiUrl}/api/products`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(productData),
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/products`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(productData),
+          }
+        );
 
         if (!response.ok) {
           const errorData = await response.json();

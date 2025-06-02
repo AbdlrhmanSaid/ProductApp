@@ -6,7 +6,10 @@ import { useSelector } from "react-redux";
 import sendMessage from "@/utils/sendMessage";
 
 const useAddUser = () => {
-  const baseUrl = useMemo(() => `${process.env.apiUrl}/api/users`, []);
+  const baseUrl = useMemo(
+    () => `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/users`,
+    []
+  );
   const { userData } = useSelector((state) => state.user);
 
   const router = useRouter();
