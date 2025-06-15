@@ -12,14 +12,14 @@ const Table = ({ users, confirmDelete, position }) => {
       {users && users.length > 0 ? (
         <div className="min-w-full">
           {/* Header for Desktop */}
-          <div className="bg-gray-200 rounded-t-lg hidden md:grid grid-cols-12 p-3">
-            <div className="col-span-4 font-semibold text-right pr-3">
+          <div className="bg-gray-200 rounded-t-lg hidden md:grid grid-cols-12 p-3 ">
+            <div className="col-span-4 font-semibold text-right px-3 mr-auto">
               اسم المستخدم
             </div>
-            <div className="col-span-4 font-semibold text-right pr-3">
+            <div className="col-span-4 font-semibold text-right px-3 mr-auto">
               البريد الإلكتروني
             </div>
-            <div className="col-span-2 font-semibold text-right pr-3">
+            <div className="col-span-2 font-semibold text-right px-3 mr-auto">
               الصلاحية
             </div>
             <div className="col-span-2 font-semibold text-center">

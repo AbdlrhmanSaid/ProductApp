@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import ErrorLogin from "@/components/ErrorLogin";
@@ -11,38 +11,45 @@ const CheckAuth = ({ children }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.userData);
-  const [isChecking, setIsChecking] = useState(true);
 
-  const fetchUserData = useCallback(() => {
+  const fetchUserData = useCallback(async () => {
     try {
-      const storedUser = sessionStorage.getItem("user_data");
-      if (storedUser) {
-        dispatch(setUser(JSON.parse(storedUser)));
+      // تحقق من وجود بيانات المستخدم في sessionStorage أولاً
+      const sessionUser = sessionStorage.getItem("user_data");
+      if (sessionUser) {
+        const parsedUser = JSON.parse(sessionUser);
+        dispatch(setUser(parsedUser));
+        return;
       }
+
+      // إذا لم توجد في sessionStorage، قم بجلبها من الخادم
+      const response = await fetch("/api/auth/verify", {
+        credentials: "include",
+      });
+
+      if (!response.ok) throw new Error("فشل التحقق من المصادقة");
+
+      const userData = await response.json();
+      sessionStorage.setItem("user_data", JSON.stringify(userData));
+      dispatch(setUser(userData));
     } catch (error) {
       console.error("فشل تحميل بيانات المستخدم:", error);
-    } finally {
-      setIsChecking(false);
+      sessionStorage.removeItem("user_data");
+      router.replace("/login");
     }
-  }, [dispatch]);
+  }, [dispatch, router]);
 
   useEffect(() => {
     if (!user) {
       fetchUserData();
-    } else {
-      setIsChecking(false);
     }
   }, [user, fetchUserData]);
 
-  useEffect(() => {
-    if (!isChecking && !user) {
-      router.replace("/login");
-    }
-  }, [user, router, isChecking]);
+  if (!user) {
+    return <Loading title="جاري التحقق من المصادقة..." />;
+  }
 
-  if (isChecking) return <Loading title="التحقق من الصلاحيات..." />;
-
-  return user ? children : <ErrorLogin />;
+  return children;
 };
 
 export default CheckAuth;
