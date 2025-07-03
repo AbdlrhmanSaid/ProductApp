@@ -21,6 +21,7 @@ const Page = ({ params }) => {
     return <p className="text-center mt-10 text-red-500">Product not found</p>;
 
   const qrValue = JSON.stringify({
+    id:product._id,
     title: product.title,
     price: product.price,
   });
