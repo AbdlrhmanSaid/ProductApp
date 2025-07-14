@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_URL_API}/api/messages`;
+const API_BASE_URL = `${
+  process.env.NEXT_PUBLIC_URL_API || process.env.NEXT_SECPUBLIC_URL_API
+}/api/messages`;
 
 const sendMessage = async ({ user, action, info }) => {
   try {

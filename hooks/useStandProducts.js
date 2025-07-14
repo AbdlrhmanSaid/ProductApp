@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import useProducts from "@/hooks/useProducts";
 
-const API_URL = `${process.env.NEXT_PUBLIC_URL_API}/api/stands`;
+const baseUrls = [
+  process.env.NEXT_PUBLIC_URL_API,
+  process.env.NEXT_SECPUBLIC_URL_API,
+];
 
 const useStandProducts = () => {
   const { id } = useParams();
@@ -13,39 +16,65 @@ const useStandProducts = () => {
   const [error, setError] = useState("");
   const { products } = useProducts();
 
+  // ✅ جلب بيانات الرف من أكثر من رابط
   useEffect(() => {
     if (!id) return;
 
     const fetchStand = async () => {
-      try {
-        const res = await fetch(`${API_URL}/${id}`);
-        if (!res.ok) throw new Error("فشل في تحميل بيانات الرف");
-        const data = await res.json();
-        setStand(data);
-      } catch (err) {
-        console.error(err);
-        setError("حدث خطأ أثناء تحميل بيانات الرف.");
-      } finally {
-        setLoading(false);
+      setLoading(true);
+      setError("");
+
+      let success = false;
+
+      for (const baseUrl of baseUrls) {
+        try {
+          const res = await fetch(`${baseUrl}/api/stands/${id}`);
+          if (!res.ok) throw new Error("استجابة غير صالحة");
+          const data = await res.json();
+          setStand(data);
+          success = true;
+          break;
+        } catch (err) {
+          console.warn(`⚠️ فشل تحميل بيانات الرف من ${baseUrl}`, err.message);
+          continue;
+        }
       }
+
+      if (!success) {
+        setError("حدث خطأ أثناء تحميل بيانات الرف.");
+      }
+
+      setLoading(false);
     };
 
     fetchStand();
   }, [id]);
 
+  // ✅ تحديث بيانات الرف عبر أكثر من رابط
   const updateStandProducts = async (action, payload) => {
-    try {
-      const res = await fetch(`${API_URL}/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, ...payload }),
-      });
+    let success = false;
 
-      if (!res.ok) throw new Error("فشل التحديث");
-      const data = await res.json();
-      setStand(data.stand);
-    } catch (err) {
-      console.error("فشل في تعديل المنتجات:", err);
+    for (const baseUrl of baseUrls) {
+      try {
+        const res = await fetch(`${baseUrl}/api/stands/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action, ...payload }),
+        });
+
+        if (!res.ok) throw new Error("فشل التحديث");
+        const data = await res.json();
+        setStand(data.stand);
+        success = true;
+        break;
+      } catch (err) {
+        console.warn(`⚠️ فشل في التحديث من ${baseUrl}`, err.message);
+        continue;
+      }
+    }
+
+    if (!success) {
+      console.error("❌ فشل في تعديل المنتجات من جميع الروابط.");
     }
   };
 

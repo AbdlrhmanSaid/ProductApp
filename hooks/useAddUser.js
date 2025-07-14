@@ -1,17 +1,12 @@
 "use client";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import sendMessage from "@/utils/sendMessage";
 
 const useAddUser = () => {
-  const baseUrl = useMemo(
-    () => `${process.env.NEXT_PUBLIC_URL_API}/api/users`,
-    []
-  );
   const { userData } = useSelector((state) => state.user);
-
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -54,12 +49,25 @@ const useAddUser = () => {
 
         const { username, email, password, position } = formData;
 
-        await axios.post(`${baseUrl}`, {
-          username,
-          email,
-          password,
-          position,
-        });
+        const primaryUrl = process.env.NEXT_PUBLIC_URL_API;
+        const fallbackUrl = process.env.NEXT_PUBLIC_SECPUBLIC_URL_API;
+
+        try {
+          await axios.post(`${primaryUrl}/api/users`, {
+            username,
+            email,
+            password,
+            position,
+          });
+        } catch (primaryError) {
+          await axios.post(`${fallbackUrl}/api/users`, {
+            username,
+            email,
+            password,
+            position,
+          });
+        }
+
         await sendMessage({
           user: userData.username,
           action: "اضافة مستخدم",
@@ -75,7 +83,7 @@ const useAddUser = () => {
         setLoading(false);
       }
     },
-    [formData, baseUrl, router, validateForm]
+    [formData, router, validateForm, userData]
   );
 
   return {

@@ -43,6 +43,7 @@ const useAddProduct = () => {
 
       try {
         setLoading(true);
+
         const productData = {
           title: product.title.trim(),
           price: priceValue,
@@ -50,18 +51,30 @@ const useAddProduct = () => {
           ...(product.image.trim() && { image: product.image.trim() }),
         };
 
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_URL_API}/api/products`,
-          {
+        const primaryUrl = process.env.NEXT_PUBLIC_URL_API;
+        const fallbackUrl = process.env.NEXT_PUBLIC_SECPUBLIC_URL_API;
+        let response;
+
+        try {
+          response = await fetch(`${primaryUrl}/api/products`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(productData),
-          }
-        );
+          });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || "❌ فشل في إرسال البيانات!");
+          if (!response.ok) throw new Error();
+        } catch (primaryError) {
+          // المحاولة مع السيرفر الاحتياطي
+          response = await fetch(`${fallbackUrl}/api/products`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(productData),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "❌ فشل في إرسال البيانات!");
+          }
         }
 
         await sendMessage({

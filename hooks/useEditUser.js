@@ -1,20 +1,20 @@
 "use client";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import sendMessage from "@/utils/sendMessage";
+
+const baseUrls = [
+  process.env.NEXT_PUBLIC_URL_API,
+  process.env.NEXT_SECPUBLIC_URL_API,
+];
 
 const useEditUser = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
   const { userData } = useSelector((state) => state.user);
-
-  const baseUrl = useMemo(
-    () => `${process.env.NEXT_PUBLIC_URL_API}/api/users`,
-    []
-  );
 
   const [formData, setFormData] = useState({
     username: "",
@@ -33,9 +33,23 @@ const useEditUser = () => {
     }
 
     const fetchUserData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const response = await axios.get(`${baseUrl}/${userId}`);
+        let success = false;
+        let response;
+
+        for (const url of baseUrls) {
+          try {
+            response = await axios.get(`${url}/api/users/${userId}`);
+            success = true;
+            break;
+          } catch (err) {
+            continue;
+          }
+        }
+
+        if (!success) throw new Error("فشل في جلب بيانات المستخدم");
+
         const { username, email, position } = response.data;
         const newData = { username, email, position: position || "normal" };
 
@@ -56,7 +70,7 @@ const useEditUser = () => {
     };
 
     fetchUserData();
-  }, [userId, baseUrl]);
+  }, [userId]);
 
   const handleSubmit = useCallback(
     async (e) => {
@@ -71,16 +85,35 @@ const useEditUser = () => {
         return;
       }
 
+      setLoading(true);
       try {
-        setLoading(true);
-        const response = await axios.patch(`${baseUrl}/${userId}`, formData);
-        await sendMessage({
-          user: userData.username,
-          action: "تحديث مستخدم",
-          info: `${userData.email} اسم المستخدم ${formData.username}`,
-        });
-        if (response.status === 200) {
-          router.push("/");
+        let success = false;
+
+        for (const url of baseUrls) {
+          try {
+            const response = await axios.patch(
+              `${url}/api/users/${userId}`,
+              formData
+            );
+
+            await sendMessage({
+              user: userData.username,
+              action: "تحديث مستخدم",
+              info: `${userData.email} اسم المستخدم ${formData.username}`,
+            });
+
+            if (response.status === 200) {
+              router.push("/");
+              success = true;
+              break;
+            }
+          } catch (err) {
+            continue;
+          }
+        }
+
+        if (!success) {
+          throw new Error("فشل في تحديث المستخدم");
         }
       } catch (err) {
         console.error("Error updating user:", err);
@@ -91,7 +124,7 @@ const useEditUser = () => {
         setLoading(false);
       }
     },
-    [formData, initialData, userId, baseUrl, router]
+    [formData, initialData, userId, router, userData]
   );
 
   const handleChange = useCallback((e) => {

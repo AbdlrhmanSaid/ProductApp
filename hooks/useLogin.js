@@ -11,8 +11,10 @@ import sendMessage from "@/utils/sendMessage";
 const useLogin = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { userData } = useSelector((state) => state.user);
   const [user, setUserState] = useState(null);
+  const paseUrl =
+    process.env.NEXT_PUBLIC_URL_API ||
+    process.env.NEXT_PUBLIC_SECPUBLIC_URL_API;
 
   const [wrongTime, setLocalWrongTime] = useState(0);
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -92,13 +94,31 @@ const useLogin = () => {
         return;
       }
 
+      const action = "تسجيل دخول";
+      let userData = null;
+      let currentBaseUrl = process.env.NEXT_PUBLIC_URL_API;
+
       try {
-        const action = "تسجيل دخول";
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_URL_API}/api/users/getByEmail`,
-          { email: formData.email }
-        );
-        const userData = response.data;
+        // المحاولة الأولى
+        try {
+          const response = await axios.post(
+            `${currentBaseUrl}/api/users/getByEmail`,
+            {
+              email: formData.email,
+            }
+          );
+          userData = response.data;
+        } catch (primaryError) {
+          // لو السيرفر الأساسي وقع - جرب الاحتياطي
+          currentBaseUrl = process.env.NEXT_PUBLIC_SECPUBLIC_URL_API;
+          const fallbackResponse = await axios.post(
+            `${currentBaseUrl}/api/users/getByEmail`,
+            {
+              email: formData.email,
+            }
+          );
+          userData = fallbackResponse.data;
+        }
 
         if (!userData.password) {
           setErrorMessage("المستخدم غير موجود");
@@ -133,7 +153,6 @@ const useLogin = () => {
         });
 
         router.push("/");
-        setIsLoading(false);
       } catch (error) {
         setErrorMessage("حدث خطأ، حاول مرة أخرى لاحقًا.");
       } finally {

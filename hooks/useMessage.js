@@ -1,7 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_URL_API}/api/messages`;
+
+const getBaseUrls = () => [
+  process.env.NEXT_PUBLIC_URL_API,
+  process.env.NEXT_PUBLIC_SECPUBLIC_URL_API,
+];
 
 const useMessage = () => {
   const [message, setMessage] = useState([]);
@@ -12,9 +16,18 @@ const useMessage = () => {
   }, []);
 
   const getMessages = async () => {
+    setLoading(true);
+    const [primaryUrl, fallbackUrl] = getBaseUrls();
+
     try {
-      const { data } = await axios.get(`${API_BASE_URL}`);
-      setMessage(data.messages);
+      let response;
+      try {
+        response = await axios.get(`${primaryUrl}/api/messages`);
+      } catch (primaryError) {
+        // تجربة الرابط الاحتياطي
+        response = await axios.get(`${fallbackUrl}/api/messages`);
+      }
+      setMessage(response.data.messages);
     } catch (err) {
       console.error("❌ خطأ في جلب البيانات:", err);
     } finally {
@@ -23,8 +36,14 @@ const useMessage = () => {
   };
 
   const deleteAllMessages = async () => {
+    const [primaryUrl, fallbackUrl] = getBaseUrls();
+
     try {
-      await axios.delete(`${API_BASE_URL}`);
+      try {
+        await axios.delete(`${primaryUrl}/api/messages`);
+      } catch (primaryError) {
+        await axios.delete(`${fallbackUrl}/api/messages`);
+      }
       getMessages();
     } catch (err) {
       console.error("❌ خطأ في مسح جميع الرسائل:", err);

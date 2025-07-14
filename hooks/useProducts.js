@@ -5,7 +5,10 @@ import ErrorPage from "@/components/ErrorPage";
 import { useSelector } from "react-redux";
 import sendMessage from "@/utils/sendMessage";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_URL_API}/api/products`;
+const baseUrls = [
+  process.env.NEXT_PUBLIC_URL_API,
+  process.env.NEXT_PUBLIC_SECPUBLIC_URL_API,
+];
 
 const useProducts = () => {
   const [products, setProducts] = useState([]);
@@ -18,21 +21,32 @@ const useProducts = () => {
   const user = useSelector((state) => state.user.userData);
   const position = user?.position;
 
-  // دالة جلب المنتجات
+  // ✅ جلب المنتجات مع تجربة الرابط البديل في حالة فشل الأساسي
   const fetchProducts = useCallback(async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${API_BASE_URL}`);
-      setProducts(data);
-    } catch (err) {
-      console.error("❌ خطأ في جلب المنتجات:", err);
-      setError(err);
-    } finally {
-      setLoading(false);
+    setLoading(true);
+    setError(null);
+
+    let success = false;
+
+    for (const url of baseUrls) {
+      try {
+        const { data } = await axios.get(`${url}/api/products`);
+        setProducts(data);
+        success = true;
+        break;
+      } catch (err) {
+        console.warn(`⚠️ فشل من ${url}`, err.message);
+        continue;
+      }
     }
+
+    if (!success) {
+      setError("❌ فشل في جلب المنتجات من جميع الروابط.");
+    }
+
+    setLoading(false);
   }, []);
 
-  // استخدام useEffect لجلب المنتجات عند تحميل الصفحة
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
@@ -49,21 +63,33 @@ const useProducts = () => {
 
   const deleteProduct = useCallback(async () => {
     if (!selectedProduct) return;
-    try {
-      await axios.delete(`${API_BASE_URL}/${selectedProduct._id}`);
 
-      setProducts((prevProducts) =>
-        prevProducts.filter((product) => product._id !== selectedProduct._id)
-      );
-      await sendMessage({
-        user: user.username,
-        action: "حذف منتج",
-        info: `${user.email} `,
-      });
-      handleClose();
-    } catch (err) {
-      console.error("❌ خطأ في حذف المنتج:", err);
+    let success = false;
+
+    for (const url of baseUrls) {
+      try {
+        await axios.delete(`${url}/api/products/${selectedProduct._id}`);
+        setProducts((prev) =>
+          prev.filter((product) => product._id !== selectedProduct._id)
+        );
+        await sendMessage({
+          user: user.username,
+          action: "حذف منتج",
+          info: `${user.email}`,
+        });
+        success = true;
+        break;
+      } catch (err) {
+        console.warn(`⚠️ فشل في حذف المنتج من ${url}`, err.message);
+        continue;
+      }
     }
+
+    if (!success) {
+      console.error("❌ فشل في حذف المنتج من جميع الروابط.");
+    }
+
+    handleClose();
   }, [selectedProduct, handleClose, user]);
 
   const uniqueCategories = useMemo(() => {

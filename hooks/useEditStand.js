@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const API_URL = `${process.env.NEXT_PUBLIC_URL_API}/api/stands`;
+const baseUrls = [
+  process.env.NEXT_PUBLIC_URL_API,
+  process.env.NEXT_SECPUBLIC_URL_API,
+];
 
 const useEditStand = (id) => {
   const router = useRouter();
@@ -15,15 +18,21 @@ const useEditStand = (id) => {
     if (!id) return;
 
     const fetchStand = async () => {
-      try {
-        const res = await fetch(`${API_URL}/${id}`);
-        if (!res.ok) throw new Error("فشل في جلب بيانات المخزن");
-        const data = await res.json();
-        setStand(data);
-      } catch (err) {
-        console.error(err);
-        setError("حدث خطأ أثناء تحميل بيانات المخزن.");
+      for (const baseUrl of baseUrls) {
+        try {
+          const res = await fetch(`${baseUrl}/api/stands/${id}`);
+          if (!res.ok) throw new Error("رابط غير صالح");
+
+          const data = await res.json();
+          setStand(data);
+          return; // خروج عند النجاح
+        } catch (err) {
+          console.warn(`⚠️ محاولة فاشلة من: ${baseUrl}`);
+          continue; // جرّب الرابط التالي
+        }
       }
+      // لو فشلت كل المحاولات
+      setError("حدث خطأ أثناء تحميل بيانات المخزن.");
     };
 
     fetchStand();
@@ -50,27 +59,37 @@ const useEditStand = (id) => {
       productSpacing: stand.productSpacing,
     };
 
-    try {
-      const res = await fetch(`${API_URL}/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedStand),
-      });
+    let success = false;
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        console.error("Error response:", errorData);
-        throw new Error("فشل في تعديل بيانات المخزن");
+    for (const baseUrl of baseUrls) {
+      try {
+        const res = await fetch(`${baseUrl}/api/stands/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedStand),
+        });
+
+        if (!res.ok) {
+          const errorData = await res.json();
+          console.error("❌ استجابة غير ناجحة:", errorData);
+          throw new Error();
+        }
+
+        alert("تم تعديل بيانات المخزن بنجاح");
+        router.push("/stands");
+        success = true;
+        break;
+      } catch (err) {
+        console.warn(`⚠️ فشل التحديث على: ${baseUrl}`);
+        continue;
       }
-
-      alert("تم تعديل بيانات المخزن بنجاح");
-      router.push("/stands");
-    } catch (err) {
-      console.error(err);
-      setError("حدث خطأ أثناء تعديل المخزن.");
-    } finally {
-      setIsSubmitting(false);
     }
+
+    if (!success) {
+      setError("حدث خطأ أثناء تعديل المخزن.");
+    }
+
+    setIsSubmitting(false);
   };
 
   return { stand, isSubmitting, error, handleChange, handleSubmit };

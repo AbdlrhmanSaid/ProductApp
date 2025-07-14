@@ -4,6 +4,12 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import sendMessage from "@/utils/sendMessage";
+import { toast } from "react-hot-toast"; // تأكد إنه مضاف في مشروعك
+
+const baseUrls = [
+  process.env.NEXT_PUBLIC_URL_API,
+  process.env.NEXT_SECPUBLIC_URL_API,
+].filter(Boolean);
 
 const useUsers = () => {
   const [users, setUsers] = useState([]);
@@ -12,16 +18,20 @@ const useUsers = () => {
   const [search, setSearch] = useState("");
 
   const user = useSelector((state) => state.user.userData);
-  const baseUrl = `${process.env.NEXT_PUBLIC_URL_API}/api/users`;
 
   const fetchUsers = useCallback(async () => {
-    try {
-      const response = await axios.get(`${baseUrl}`);
-      setUsers(response.data);
-    } catch (error) {
-      console.error("خطأ في جلب المستخدمين:", error);
-      toast.error("فشل في جلب المستخدمين. حاول مرة أخرى.");
+    for (const url of baseUrls) {
+      try {
+        const response = await axios.get(`${url}/api/users`);
+        setUsers(response.data);
+        return;
+      } catch (error) {
+        console.warn(`❌ فشل من ${url}:`, error.message);
+        continue;
+      }
     }
+
+    toast.error("فشل في جلب المستخدمين. حاول مرة أخرى.");
   }, []);
 
   useEffect(() => {
@@ -41,40 +51,43 @@ const useUsers = () => {
 
   const deleteUser = useCallback(async () => {
     if (!userToDelete) return;
-    try {
-      await axios.delete(`${baseUrl}/${userToDelete}`);
-      setUsers((prevUsers) =>
-        prevUsers.filter((user) => user._id !== userToDelete)
-      );
 
+    for (const url of baseUrls) {
       try {
-        await sendMessage({
-          user: user.username,
-          action: "حذف مستخدم",
-          info: `${user.email}`,
-        });
-      } catch (logError) {
-        console.error("فشل في تسجيل النشاط:", logError);
-      }
+        await axios.delete(`${url}/api/users/${userToDelete}`);
+        setUsers((prevUsers) =>
+          prevUsers.filter((u) => u._id !== userToDelete)
+        );
 
-      handleClose();
-    } catch (error) {
-      console.error("خطأ في حذف المستخدم:", error);
-      toast.error("فشل حذف المستخدم. حاول مرة أخرى.");
+        try {
+          await sendMessage({
+            user: user.username,
+            action: "حذف مستخدم",
+            info: `${user.email}`,
+          });
+        } catch (logError) {
+          console.error("⚠️ فشل تسجيل النشاط:", logError);
+        }
+
+        handleClose();
+        return;
+      } catch (error) {
+        console.warn(`❌ فشل حذف من ${url}:`, error.message);
+        continue;
+      }
     }
-  }, [userToDelete, handleClose]);
+
+    toast.error("فشل حذف المستخدم. حاول مرة أخرى.");
+  }, [userToDelete, handleClose, user]);
 
   const filteredUsers = useMemo(() => {
     if (!search) return users;
-    const lowerCaseSearch = search.toLowerCase().normalize("NFKD");
+    const lower = search.toLowerCase().normalize("NFKD");
     return users.filter(
       (user) =>
-        user.username
-          .toLowerCase()
-          .normalize("NFKD")
-          .includes(lowerCaseSearch) ||
-        user.email.toLowerCase().normalize("NFKD").includes(lowerCaseSearch) ||
-        user.position.toLowerCase().normalize("NFKD").includes(lowerCaseSearch)
+        user.username.toLowerCase().normalize("NFKD").includes(lower) ||
+        user.email.toLowerCase().normalize("NFKD").includes(lower) ||
+        user.position.toLowerCase().normalize("NFKD").includes(lower)
     );
   }, [search, users]);
 

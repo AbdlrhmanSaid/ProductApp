@@ -2,6 +2,11 @@
 
 import { useState, useCallback } from "react";
 
+const baseUrls = [
+  process.env.NEXT_PUBLIC_URL_API,
+  process.env.NEXT_SECPUBLIC_URL_API,
+];
+
 const useProduct = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -17,16 +22,28 @@ const useProduct = () => {
     const signal = controller.signal;
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_API}/api/products/${id}`,
-        {
-          signal,
+      let success = false;
+      let data = null;
+
+      for (const baseUrl of baseUrls) {
+        try {
+          const res = await fetch(`${baseUrl}/api/products/${id}`, { signal });
+
+          if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+
+          data = await res.json();
+          success = true;
+          break;
+        } catch (err) {
+          if (err.name === "AbortError") {
+            console.warn("Request aborted");
+            return;
+          }
+          console.warn(`⚠️ فشل من الرابط: ${baseUrl}`, err.message);
         }
-      );
+      }
 
-      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-
-      const data = await res.json();
+      if (!success || !data) throw new Error("فشل في جلب بيانات المنتج");
 
       setProduct((prevProduct) =>
         JSON.stringify(prevProduct) !== JSON.stringify(data)
@@ -34,10 +51,8 @@ const useProduct = () => {
           : prevProduct
       );
     } catch (err) {
-      if (err.name !== "AbortError") {
-        setError("خطأ في جلب المنتج، حاول مرة أخرى.");
-        console.error("Error fetching product:", err);
-      }
+      setError("خطأ في جلب المنتج، حاول مرة أخرى.");
+      console.error("❌ Error fetching product:", err);
     } finally {
       setLoading(false);
     }

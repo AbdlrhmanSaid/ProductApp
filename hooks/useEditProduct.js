@@ -20,13 +20,32 @@ const useEditProduct = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const baseUrls = [
+    process.env.NEXT_PUBLIC_URL_API,
+    process.env.NEXT_PUBLIC_SECPUBLIC_URL_API,
+  ];
+
   const fetchProduct = useCallback(async () => {
     if (!id) return;
+
+    setLoading(true);
     try {
-      setLoading(true);
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_URL_API}/api/products/${id}`
-      );
+      let response;
+      let success = false;
+
+      for (const url of baseUrls) {
+        try {
+          response = await axios.get(`${url}/api/products/${id}`);
+          success = true;
+          break;
+        } catch (err) {
+          continue;
+        }
+      }
+
+      if (!success) throw new Error("فشل في جلب المنتج من كل الروابط");
+
+      const data = response.data;
       setProduct({
         title: data.title || "",
         price: data.price?.toString() || "0",
@@ -76,15 +95,25 @@ const useEditProduct = () => {
       e.preventDefault();
       if (!id) return;
 
+      setLoading(true);
       try {
-        setLoading(true);
-        await axios.patch(
-          `${process.env.NEXT_PUBLIC_URL_API}/api/products/${id}`,
-          {
-            ...product,
-            price: parseFloat(product.price),
+        let success = false;
+
+        for (const url of baseUrls) {
+          try {
+            await axios.patch(`${url}/api/products/${id}`, {
+              ...product,
+              price: parseFloat(product.price),
+            });
+            success = true;
+            break;
+          } catch (err) {
+            continue;
           }
-        );
+        }
+
+        if (!success) throw new Error("فشل في تحديث المنتج");
+
         await sendMessage({
           user: userData.username,
           action: "تحديث منتج",
